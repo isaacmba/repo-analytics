@@ -45,6 +45,9 @@ app.get('/', function (req, res) {
    res.sendFile(__dirname + "/index.html");
 });
 
+app.post('/login',function(req,res,next){
+  res.send(req.body);
+})
 
 //Get a list of all user repo's and return it to client
 app.get('/repos', function (req, res) {
@@ -79,4 +82,10 @@ app.get('/repo', function (req, res) {
 });
  
 
-app.listen(8000);
+var port = process.env.PORT || '4000';
+
+app.listen(port);
+
+
+
+

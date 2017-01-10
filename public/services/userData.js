@@ -1,1 +1,6 @@
-userData.js
+app.factory('userData',['$http', function($http){
+
+    
+
+  
+}])
