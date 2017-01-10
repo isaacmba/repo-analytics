@@ -1,0 +1,25 @@
+{
+  "name": "repo-analytics",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaac-ba/repo-analytics.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/isaac-ba/repo-analytics/issues"
+  },
+  "homepage": "https://github.com/isaac-ba/repo-analytics#readme",
+  "dependencies": {
+    "angular": "^1.6.1",
+    "angular-ui-router": "^0.3.2",
+    "express": "^4.14.0",
+    "passport": "^0.3.2"
+  }
+}
