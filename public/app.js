@@ -3,8 +3,6 @@ var app  = angular.module('repoApp',['ui.router']);
 app.config([
   '$stateProvider',
   '$urlRouterProvider',
-  '$stateProvider',
-  '$urlRouterProvider',
   function($stateProvider, $urlRouterProvider) {
     $stateProvider
       .state('login',{
