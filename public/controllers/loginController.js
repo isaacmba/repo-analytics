@@ -1,5 +1,8 @@
-app.controller('LoginCtrl', ['$scope', 'login', function($scope, login){
-  $scope.findAcount = function(){
-    console.log($scope.username + ' ' + $scope.password);
+app.controller('LoginCtrl',['$scope','login','$state',function($scope,login,$state){
+
+  $scope.click = function(){
+    login.click($scope.user)
   }
-}])
+  
+
+} ])
