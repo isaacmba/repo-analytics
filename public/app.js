@@ -13,10 +13,11 @@ app.config([
         templateUrl:'/templates/login.html'
       })
       .state('userData',{
-        
-        
-      })
- }
+        url:'/user',
+        controller:'UserDataCtrl',
+        templateUrl:'/templates/userData.html'
+      });
+   }
 
 
-  ])
+])
