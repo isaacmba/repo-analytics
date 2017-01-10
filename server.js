@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 /****************Vars*********************/
 
 var options = {
-  url: 'https://github.com',
+  url: '',
   headers: {
     'User-Agent': 'request'
   }
@@ -27,29 +27,15 @@ var options = {
 
 /**************Helper funcs*******************/
 
-function callback(error, response, body) {
-  if (!error && response.statusCode == 200) {
-    var info = JSON.parse(body);
-    res.send(body);
-  }else{
-    console.log(error);
-  } 
-}
+// function callback(error, response, body) {
+//   if (!error && response.statusCode == 200) {
+//     return body;
+//   }else{
+//     return error;
+//   } 
+// }
 
 /*************API Functionality***************/
-
-//Gettint Data from out external API
-// var requestDataFromApi = function(url){
-//   return request(url, function (error, response, body) {
-//     if (!error && response.statusCode == 200) {
-//       console.log(body);
-//       return (body);
-//     }
-//     else{
-//       return (error);
-//     }
-//   })
-// };
 
 
 /*******************Event Handlers*******************/
@@ -60,5 +46,37 @@ app.get('/', function (req, res) {
 });
 
 
+//Get a list of all user repo's and return it to client
+app.get('/repos', function (req, res) {
+  
+  options.url = 'https://api.github.com/users/dfntlymaybe/repos';//for now its just static data
+  console.log('getting repos');
+
+  request(options, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var info = JSON.parse(body);
+      console.log(info);
+      res.json(info);
+    }
+  })
+});
+
+//Get specific repo and return it to the client
+app.get('/repo', function (req, res) {
+
+  options.url = 'https://api.github.com/repos/dfntlymaybe/rereddit'  //for now its just static data
+  console.log('getting repo');//dev
+  
+  request(options, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var info = JSON.parse(body);
+      res.json(info);
+    }
+    else{
+      console.log(error);
+    } 
+  })
+});
+ 
 
 app.listen(8000);
