@@ -4,21 +4,21 @@
   <title></title>
   <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="style.css">
-  <script src="node_modules/jquery/dist/jquery.min.js"></script>
-  <script src="node_modules/angular/angular.min.js"></script>
-  <script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
+  <script src="../jquery/dist/jquery.min.js"></script>
+  <script src="../angular/angular.js"></script>
+  <script src="../angular-ui-router/release/angular-ui-router.min.js"></script>
 </head>
 <body ng-app="repoApp" ng-controller="LoginCtrl">
 
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+
+      <!-- <a href="#" ng-click="click()">Click me</a> -->
       <ui-view></ui-view>
-    </div>
-  </div>
+
 
 
 
   <script src="app.js"></script>
+  <script src="services/login.js"></script>
   <script src="controllers/loginController.js"></script>
   <script src="controllers/userDataController.js"></script>
 

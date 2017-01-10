@@ -23,18 +23,18 @@
                    
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input id="user" type="text" class="form-control" name="user" value="" placeholder="User">                                        
+                        <input id="user" type="text" class="form-control" ng-model="user.username" value="" placeholder="User">                                        
                     </div>
 
                     <div class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                        <input id="password" type="password" class="form-control" name="password" placeholder="Password">
+                        <input id="password" type="password" class="form-control" ng-model="user.password" placeholder="Password">
                     </div>                                                                  
 
                     <div class="form-group">
                         <!-- Button -->
                         <div class="col-sm-12 controls">
-                            <button type="submit" href="#" class="btn btn-primary pull-right"><i class="glyphicon glyphicon-log-in"></i> Log in</button>                          
+                            <button type="submit" href="#" class="btn btn-primary pull-right" ng-click="click()"><i class="glyphicon glyphicon-log-in"></i> Log in</button>                          
                         </div>
                     </div>
 
