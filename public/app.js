@@ -3,12 +3,10 @@ var app  = angular.module('repoApp',['ui.router']);
 app.config([
   '$stateProvider',
   '$urlRouterProvider',
-  '$stateProvider',
-  '$urlRouterProvider',
   function($stateProvider, $urlRouterProvider) {
     $stateProvider
       .state('login',{
-        url:'/',
+        url:'/login',
         controller:'LoginCtrl',
         templateUrl:'/templates/login.html'
       })
@@ -17,6 +15,7 @@ app.config([
         controller:'UserDataCtrl',
         templateUrl:'/templates/userData.html'
       });
+      $urlRouterProvider.otherwise('login');
    }
 
 
