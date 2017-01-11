@@ -46,8 +46,10 @@ var getInfoFromApi = function(url,res){
       console.log(response.headers.link)
       var n = response.headers.link
       var info = JSON.parse(body);
-      res.json(info);
+    }else{
+      var info = "NOT FOUND"
     }
+    res.json(info);
   })
 }
 
@@ -131,7 +133,18 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
             console.log(error + " status code: " + response.statusCode);
             data.package = "NOT FOUND";
           }
-          res.send(data);
+          options.url = baseUrl + '/stats/punch_card' + POSURL;
+          request(options, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+              console.log("fifth request");
+              var info = JSON.parse(body);
+              data.punch_card = info;
+            }else{
+              console.log(error + " status code: " + response.statusCode);
+              data.punch_card = "NOT FOUND";
+            }
+            res.send(data);
+          }); 
         });     
       });
     });   
