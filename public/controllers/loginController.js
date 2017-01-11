@@ -6,6 +6,10 @@ $scope.click = function(){
     login.click($scope.user)
     console.log(login.userData);
   }
+  $scope.isLoggedIn = function(){
+    return false;
+  };
+
   
 
-} ])
+}])

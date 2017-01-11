@@ -8,8 +8,9 @@ app.factory('login',['$http', function($http){
       console.log(user);
       $http.get('https://api.github.com/users/'+user.username+'/repos').then(function(data){
         angular.copy(data.data, loginService.userData);
-      })
-    }
+      });
+    },
+
   }
   
   return loginService;

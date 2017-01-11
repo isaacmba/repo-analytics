@@ -12,9 +12,10 @@ app.config([
       })
       .state('userData',{
         url:'/user',
-        controller:'UserDataCtrl',
+        controller:'navCtrl',
         templateUrl:'/templates/userData.html'
-      });
+      })
+
       $urlRouterProvider.otherwise('login');
    }
 
