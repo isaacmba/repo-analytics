@@ -20,9 +20,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 /****************Vars*********************/
 
+var rootUrl = "https://api.github.com";
 
 
-/**************Helper funcs*******************/
+/**************middleware***********************/
 
 
 
@@ -57,17 +58,17 @@ app.post('/login',function(req,res,next){
 })
 
 //Get a list of all user repo's and return it to client
-app.get('/repos', function (req, res) {
-  
-  var url = 'https://api.github.com/users/dfntlymaybe/repos';//for now its just static data
+app.get('/repos/:owner', function (req, res) {
+  console.log(req.params.owner);//dev
+  var url = 'https://api.github.com/users/' + req.params.owner + '/repos';
   getInfoFromApi(url, res);
 
 });
 
 //Get specific repo and return it to the client
-app.get('/repo', function (req, res) {
+app.get('/repo/:owner/:repo', function (req, res) {
 
-  var url = 'https://api.github.com/repos/dfntlymaybe/rereddit'  //for now its just static data
+  var url = 'https://api.github.com/repos/' + req.params.owner + '/' + req.params.repo;
   getInfoFromApi(url, res);
 });
 
