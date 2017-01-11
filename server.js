@@ -28,7 +28,34 @@ var POSURL = "?client_id=" + CLIENTID +"&client_secret=" + CLIENTSECRET;
 
 /**************middleware***********************/
 
+// router.get('/issues', function(req, res) {
+//         var data = [];
+//         var getData = function(pageCounter) {
+//             request(options, function(error, response, body) {
+//                 if(!error && response.statusCode === 200) {
+//                     // for(var issueIndex = 0; issueIndex < body.length; issueIndex++) {
+//                     //     if(!body[issueIndex].pull_request) {
+//                     //         issueData.push({
+//                     //             number: body[issueIndex].number,
+//                     //             title: body[issueIndex].title,
+//                     //             state: body[issueIndex].state,
+//                     //             creator: body[issueIndex].user.login,
+//                     //             assignee: body[issueIndex].assignee ? body[issueIndex].assignee.login : ''
+//                     //         });
+//                     //     }
+//                     // }
 
+//                     if(body.length < 30) {
+//                         res.send(issueData);
+//                     } else {
+//                         getData(pageCounter + 1);
+//                     }
+//                 }
+//             });
+//         };
+//         getData(1);
+//     });
+// };
 
 /*************API Functionality***************/
 
@@ -43,8 +70,13 @@ var getInfoFromApi = function(url,res){
 
   request(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      console.log(response.headers.link)
-      var n = response.headers.link
+
+      // var temp = JSON.parse(response.headers.link);
+      console.log(response.headers.link);
+      // console.log(body[0]);
+      // body.temp = response.headers.link;
+      
+      // var n = response.headers.link
       var info = JSON.parse(body);
     }else{
       var info = "NOT FOUND"
@@ -64,13 +96,42 @@ app.post('/login',function(req,res,next){
   res.send(req.body);
 })
 
+
+
 //Get a list of all user repo's and return it to client
 app.get('/repos/:owner', function (req, res) {
   
-  var url = rootUrl + '/users/' + req.params.owner + '/repos' + POSURL;
-  getInfoFromApi(url, res);
+  var data = [];
+
+  var getData = function(pageCounter) {
+    var options = {
+      url: rootUrl + '/users/' + req.params.owner + '/repos' + POSURL + '&per_page=100' + '&page=' + pageCounter,
+      headers: {
+        'User-Agent': 'repo_analytics'
+      }
+    };
+    console.log('url: ' + options.url);
+    request(options, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+
+        data.push(JSON.parse(body));
+        if(body == '[]') {
+            console.log('page empty: ' + pageCounter)
+            res.send(data);
+        } else {
+            getData(pageCounter + 1);
+        }
+
+      }else{
+        var info = "NOT FOUND"
+      }
+    })
+  }
+  getData(1);
 
 });
+
+
 
 //Get specific repo and return it to the client
 // app.get('/repo/:owner/:repo', function (req, res) {
