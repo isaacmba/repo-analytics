@@ -20,25 +20,30 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 /****************Vars*********************/
 
-var options = {
-  url: '',
-  headers: {
-    'User-Agent': 'request'
-  }
-};
+
 
 /**************Helper funcs*******************/
 
-// function callback(error, response, body) {
-//   if (!error && response.statusCode == 200) {
-//     return body;
-//   }else{
-//     return error;
-//   } 
-// }
+
 
 /*************API Functionality***************/
 
+var getInfoFromApi = function(url,res){
+
+  var options = {
+    url: url,
+    headers: {
+      'User-Agent': 'request'
+    }
+  };
+
+  request(options, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var info = JSON.parse(body);
+      res.json(info);
+    }
+  })
+}
 
 /*******************Event Handlers*******************/
 
@@ -54,38 +59,22 @@ app.post('/login',function(req,res,next){
 //Get a list of all user repo's and return it to client
 app.get('/repos', function (req, res) {
   
-  options.url = 'https://api.github.com/users/dfntlymaybe/repos';//for now its just static data
-  console.log('getting repos');
+  var url = 'https://api.github.com/users/dfntlymaybe/repos';//for now its just static data
+  getInfoFromApi(url, res);
 
-  request(options, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var info = JSON.parse(body);
-      console.log(info);
-      res.json(info);
-    }
-  })
 });
 
 //Get specific repo and return it to the client
 app.get('/repo', function (req, res) {
 
-  options.url = 'https://api.github.com/repos/dfntlymaybe/rereddit'  //for now its just static data
-  console.log('getting repo');//dev
-  
-  request(options, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      var info = JSON.parse(body);
-      res.json(info);
-    }
-    else{
-      console.log(error);
-    } 
-  })
+  var url = 'https://api.github.com/repos/dfntlymaybe/rereddit'  //for now its just static data
+  getInfoFromApi(url, res);
 });
 
 /////////git auth///////////
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.get('/auth/github',passport.authenticate('github'));
 
 passport.serializeUser(function(user,done){
