@@ -3,9 +3,9 @@
     <div class="col-md-6">
       <ul class="list-group" >
         <h5>{{repos[0].owner.login}}</h5>
-
-        <li class="list-group-item" ng-repeat="repo in repos track by $index"><a ng-click="repoInfo($index)"></a>{{repo.name}}</li>
-        
-      </ul>
+        <li class="list-group-item" ng-repeat="repo in repos track by $index">{{repo.name}}
+        <a ng-click="repoInfo($index)">Click</a>
+        </li>
+        </ul>
     </div>
 </div>

@@ -4,10 +4,11 @@ $scope.user = login.user;
 
 $scope.click = function(){
   console.log("in controller");
-  // $scope.$apply();
     login.click($scope.username)
-
-  }
+}
+$scope.stats = function(){
+  
+}
 
 
 } ])

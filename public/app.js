@@ -18,8 +18,18 @@ app.config([
         resolve:{
           postPromise: ['login','$stateParams', function(login){
             return login.getRepos();
-        }]
-       }
+        }]}
+      })
+      .state('userStats',{
+        url:'/stats',
+        controller:'statsCtrl',
+        templateUrl:'/templates/stats.html',
+        resolve:{
+          stats:['userStats', function(userStats){
+            // console.log("here in the app.js resolve")
+            return userStats.stats();
+          }]
+        }
       })
       $urlRouterProvider.otherwise('login');
    }

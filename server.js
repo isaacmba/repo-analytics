@@ -6,11 +6,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var GitHubStrategy = require('passport-github2').Strategy;
 var expressSession = require('express-session');
-var RapidAPI = new require('rapidapi-connect');
-var rapid = new RapidAPI('repo_analytics', '35417ae3-3f16-49d5-8156-165f056c0a5b');
 
-
-rapid.call('Twilio', 'sendMessage', {'{heheeh}'});
 /**********Set Up****************/
 
 var app = express();
