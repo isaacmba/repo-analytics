@@ -6,10 +6,11 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var GitHubStrategy = require('passport-github2').Strategy;
 var expressSession = require('express-session');
+var RapidAPI = new require('rapidapi-connect');
+var rapid = new RapidAPI('repo_analytics', '35417ae3-3f16-49d5-8156-165f056c0a5b');
 
 
-
-
+rapid.call('Twilio', 'sendMessage', {'{heheeh}'});
 /**********Set Up****************/
 
 var app = express();
@@ -73,14 +74,14 @@ app.get('/repos/:owner', function (req, res) {
 });
 
 //Get specific repo and return it to the client
-app.get('/repo/:owner/:repo', function (req, res) {
+// app.get('/repo/:owner/:repo', function (req, res) {
 
-  var url = rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo + '/' + POSURL;
-  getInfoFromApi(url, res);
-});
+//   var url = rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo + '/' + POSURL;
+//   getInfoFromApi(url, res);
+// });
 
 app.get('/fullrepo/:owner/:repo', function (req, res) {
-
+  console.log("in server get func")
   var baseUrl = rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo;
   var options = {
     url: baseUrl,

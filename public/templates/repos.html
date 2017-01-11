@@ -1,8 +1,11 @@
 <div class='container'>
   <div class="row">
     <div class="col-md-6">
-      <ul class="list-group">
-        <li class="list-group-item" ng-repeat="repo in repos">{{repo.name}}</li>
+      <ul class="list-group" >
+        <h5>{{repos[0].owner.login}}</h5>
+
+        <li class="list-group-item" ng-repeat="repo in repos track by $index"><a ng-click="repoInfo($index)"></a>{{repo.name}}</li>
+        
       </ul>
     </div>
 </div>

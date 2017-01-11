@@ -27,6 +27,7 @@
     "passport": "^0.3.2",
     "passport-github": "^1.1.0",
     "passport-github2": "^0.1.10",
+    "rapidapi-connect": "0.0.2",
     "request": "^2.79.0"
   }
 }

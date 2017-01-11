@@ -6,7 +6,7 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
     click:function(username){
         console.log("in service")
 
-      $http.get('https://api.github.com/users/'+username+'/repos').then(function(data){
+      $http.get('/repos/'+username).then(function(data){
         // console.log(data.data)
         angular.copy(data.data,loginService.userData);
         // console.log(loginService.userData);
@@ -16,9 +16,17 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
     },
      getRepos :function(){
       for(var i = 0;i<loginService.userData.length;i++){
-        console.log(loginService.userData[i].name)
+        console.log(loginService.userData[i].full_name)
       }
-    } 
+    },
+    repoInfo:function(repo){
+      // console.log(repo.owner.login);
+      console.log("get this info");
+
+      $http.get('/fullrepo/'+repo.owner.login+'/'+repo.name).then(function(data){
+        console.log(data);
+      })
+    }
   }
   
   return loginService;
