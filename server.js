@@ -24,6 +24,9 @@ app.use(bodyParser.urlencoded({extended: false}));
 /****************Vars*********************/
 
 var rootUrl = "https://api.github.com";
+var CLIENTID = "89e05ffc8792b80ca766";
+var CLIENTSECRET = "04fb4a8693571d21899733433ebb2dbf9cb9e85a";
+var POSURL = "?client_id=" + CLIENTID +"&client_secret=" + CLIENTSECRET;
 
 
 /**************middleware***********************/
@@ -64,7 +67,7 @@ app.post('/login',function(req,res,next){
 //Get a list of all user repo's and return it to client
 app.get('/repos/:owner', function (req, res) {
   
-  var url = rootUrl + '/users/' + req.params.owner + '/repos';
+  var url = rootUrl + '/users/' + req.params.owner + '/repos' + POSURL;
   getInfoFromApi(url, res);
 
 });
@@ -72,7 +75,7 @@ app.get('/repos/:owner', function (req, res) {
 //Get specific repo and return it to the client
 app.get('/repo/:owner/:repo', function (req, res) {
 
-  var url = rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo;
+  var url = rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo + '/' + POSURL;
   getInfoFromApi(url, res);
 });
 
@@ -87,7 +90,8 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
   };
 
   var data = {}; 
-
+  
+  options.url = baseUrl + '' + POSURL;
   request(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       console.log("first request");
@@ -95,7 +99,7 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
       data.info = info;
     }
 
-    options.url = baseUrl + '/stats/commit_activity';
+    options.url = baseUrl + '/stats/commit_activity' + POSURL;
     request(options, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         console.log("second request");
@@ -103,7 +107,7 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
         data.commits = info;
       }
 
-      options.url = baseUrl + '/stats/contributors';
+      options.url = baseUrl + '/stats/contributors' + POSURL;
       request(options, function (error, response, body) {
         if (!error && response.statusCode == 200) {
           console.log("third request");
@@ -113,7 +117,7 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
           console.log(error);
         }
 
-        options.url = baseUrl + '/contents/package.json';
+        options.url = baseUrl + '/contents/package.json/' + POSURL;
         request(options, function (error, response, body) {
           if (!error && response.statusCode == 200) {
             console.log("forth request");
@@ -153,8 +157,8 @@ passport.deserializeUser(function(user,done){
 })
 
 passport.use(new GitHubStrategy({
-    clientID: '89e05ffc8792b80ca766',
-    clientSecret: '04fb4a8693571d21899733433ebb2dbf9cb9e85a',
+    clientID: CLIENTID,
+    clientSecret: CLIENTSECRET,
     callbackURL: "http://127.0.0.1:4000/auth/github/callback"
   },
 
