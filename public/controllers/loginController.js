@@ -3,9 +3,11 @@ app.controller('LoginCtrl',['$scope','login','$state',function($scope,login,$sta
 $scope.user = login.user;
 
 $scope.click = function(){
-    login.click($scope.user)
-    console.log(login.userData);
+  console.log("in controller");
+  // $scope.$apply();
+    login.click($scope.username)
+
   }
-  
+
 
 } ])

@@ -5,6 +5,9 @@ var request = require('request');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var GitHubStrategy = require('passport-github2').Strategy;
+var expressSession = require('express-session');
+
+
 
 
 /**********Set Up****************/
@@ -73,7 +76,8 @@ app.get('/repo/:owner/:repo', function (req, res) {
 });
 
 /////////git auth///////////
-// app.use(express.session({secret: 'mysecret'}));
+app.use(expressSession({ secret: 'mySecretKey' }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -83,8 +87,8 @@ passport.serializeUser(function(user,done){
   done(null,user);
 })
 
-passport.deserializeUser(function(obj,done){
-  done(null,obj);
+passport.deserializeUser(function(user,done){
+  done(null,user);
 })
 
 passport.use(new GitHubStrategy({
@@ -95,8 +99,8 @@ passport.use(new GitHubStrategy({
 
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function(){
-
-      return done(null,{profile:profile, accessToken:accessToken})
+      console.log(accessToken)
+      return done(null,{profile:profile._json, accessToken:accessToken})
     })
 }
 ));
@@ -104,10 +108,17 @@ passport.use(new GitHubStrategy({
 app.get('/auth/github/callback', 
   passport.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
-    console.log(req.user.accessToken)
+    console.log(req.user.profile)
     // Successful authentication, redirect home.
-    res.redirect('/user');
+    res.redirect('/');
   });
+app.get('/',function(req,res){
+  console.log(req.user)
+})
+app.get('/logout', function(req,res){
+  req.logout();
+  res.redirect('/');
+})
  
 
 var port = process.env.PORT || '4000';

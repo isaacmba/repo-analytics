@@ -10,11 +10,17 @@ app.config([
         controller:'LoginCtrl',
         templateUrl:'/templates/login.html'
       })
-      .state('userData',{
-        url:'/user',
-        controller:'UserDataCtrl',
-        templateUrl:'/templates/userData.html'
-      });
+     
+      .state('userRepos',{
+        url:'/user_repos/:user',
+        controller:'userData',
+        templateUrl:'/templates/repos.html',
+        resolve:{
+          postPromise: ['login','$stateParams', function(login){
+            return login.getRepos();
+        }]
+       }
+      })
       $urlRouterProvider.otherwise('login');
    }
 
