@@ -2,19 +2,16 @@ app.factory('login',['$http', function($http){
 
   loginService = {
     user:{},
+    userData:[],
     click:function(user){
-    //   $http.post('/login',user).then(function(data){
-    //   // console.log(data.data);
-    //   angular.copy(data.data , loginService.user);
-    //   // console.log(loginService.user)
-    // })
-    //   console.log(user);
-    // $http.get('/auth/github').then(function(data){
-    //   console.log(data);
-    // })
+      console.log(user);
+      $http.get('https://api.github.com/users/'+user.username+'/repos').then(function(data){
+        angular.copy(data.data,loginService.userData);
+      })
+      
     }
   }
   
-
   return loginService;
 }])
+//headers:{'User-Agent':'request'}
