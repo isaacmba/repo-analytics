@@ -1,7 +1,10 @@
 app.controller('LoginCtrl',['$scope','login','$state',function($scope,login,$state){
 
-  $scope.click = function(){
+$scope.user = login.user;
+
+$scope.click = function(){
     login.click($scope.user)
+    console.log(login.userData);
   }
   
 

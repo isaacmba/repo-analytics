@@ -27,19 +27,6 @@ var options = {
   }
 };
 
-/**************Helper funcs*******************/
-
-// function callback(error, response, body) {
-//   if (!error && response.statusCode == 200) {
-//     return body;
-//   }else{
-//     return error;
-//   } 
-// }
-
-/*************API Functionality***************/
-
-
 /*******************Event Handlers*******************/
 
 //Sending HTML on first GET
@@ -84,6 +71,7 @@ app.get('/repo', function (req, res) {
 });
 
 /////////git auth///////////
+// app.use(express.session({secret: 'mysecret'}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.get('/auth/github',passport.authenticate('github'));
@@ -104,8 +92,8 @@ passport.use(new GitHubStrategy({
 
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function(){
-      console.log(profile)
-      return done(null,profile)
+
+      return done(null,{profile:profile, accessToken:accessToken})
     })
 }
 ));
@@ -113,6 +101,7 @@ passport.use(new GitHubStrategy({
 app.get('/auth/github/callback', 
   passport.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
+    console.log(req.user.accessToken)
     // Successful authentication, redirect home.
     res.redirect('/user');
   });
