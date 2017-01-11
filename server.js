@@ -60,7 +60,7 @@ app.post('/login',function(req,res,next){
 //Get a list of all user repo's and return it to client
 app.get('/repos/:owner', function (req, res) {
   console.log(req.params.owner);//dev
-  var url = 'https://api.github.com/users/' + req.params.owner + '/repos';
+  var url = rootUrl + '/users/' + req.params.owner + '/repos';
   getInfoFromApi(url, res);
 
 });
@@ -68,7 +68,7 @@ app.get('/repos/:owner', function (req, res) {
 //Get specific repo and return it to the client
 app.get('/repo/:owner/:repo', function (req, res) {
 
-  var url = 'https://api.github.com/repos/' + req.params.owner + '/' + req.params.repo;
+  var url = rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo;
   getInfoFromApi(url, res);
 });
 
