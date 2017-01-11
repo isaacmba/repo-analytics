@@ -73,6 +73,7 @@ app.get('/repo/:owner/:repo', function (req, res) {
 });
 
 /////////git auth///////////
+// app.use(express.session({secret: 'mysecret'}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -94,8 +95,8 @@ passport.use(new GitHubStrategy({
 
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function(){
-      console.log(profile)
-      return done(null,profile)
+
+      return done(null,{profile:profile, accessToken:accessToken})
     })
 }
 ));
@@ -103,6 +104,7 @@ passport.use(new GitHubStrategy({
 app.get('/auth/github/callback', 
   passport.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
+    console.log(req.user.accessToken)
     // Successful authentication, redirect home.
     res.redirect('/user');
   });
