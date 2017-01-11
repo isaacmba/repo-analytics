@@ -34,12 +34,13 @@ var getInfoFromApi = function(url,res){
   var options = {
     url: url,
     headers: {
-      'User-Agent': 'request'
+      'User-Agent': 'repo_analytics'
     }
   };
 
   request(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
+      console.log(response.headers.link)
       var info = JSON.parse(body);
       res.json(info);
     }
@@ -59,7 +60,7 @@ app.post('/login',function(req,res,next){
 
 //Get a list of all user repo's and return it to client
 app.get('/repos/:owner', function (req, res) {
-  console.log(req.params.owner);//dev
+  
   var url = rootUrl + '/users/' + req.params.owner + '/repos';
   getInfoFromApi(url, res);
 
@@ -71,6 +72,66 @@ app.get('/repo/:owner/:repo', function (req, res) {
   var url = rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo;
   getInfoFromApi(url, res);
 });
+
+app.get('/fullrepo/:owner/:repo', function (req, res) {
+
+  var baseUrl = rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo;
+  var options = {
+    url: baseUrl,
+    headers: {
+      'User-Agent': 'repo_analytics'
+    }
+  };
+
+  var data = {}; 
+
+  request(options, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      console.log("first request");
+      var info = JSON.parse(body);
+      data.info = info;
+    }
+
+    options.url = baseUrl + '/stats/commit_activity';
+    request(options, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        console.log("second request");
+        var info = JSON.parse(body);
+        data.commits = info;
+      }
+
+      options.url = baseUrl + '/stats/contributors';
+      request(options, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+          console.log("third request");
+          var info = JSON.parse(body);
+          data.contributores = info;
+        }else{
+          console.log(error);
+        }
+
+        options.url = baseUrl + '/contents/package.json';
+        request(options, function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            console.log("forth request");
+            var info = JSON.parse(body);
+            data.package = info;
+
+            res.send(data);
+
+          };
+        });     
+      });
+    });   
+
+  // var punchUrl = url + '/stats/punch_card';
+
+  });
+});
+
+
+
+
 
 /////////git auth///////////
 // app.use(express.session({secret: 'mysecret'}));
@@ -109,7 +170,6 @@ app.get('/auth/github/callback',
     res.redirect('/user');
   });
  
-
 var port = process.env.PORT || '4000';
 
 app.listen(port);
