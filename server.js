@@ -44,6 +44,7 @@ var getInfoFromApi = function(url,res){
   request(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       console.log(response.headers.link)
+      var n = response.headers.link
       var info = JSON.parse(body);
       res.json(info);
     }
@@ -70,11 +71,11 @@ app.get('/repos/:owner', function (req, res) {
 });
 
 //Get specific repo and return it to the client
-app.get('/repo/:owner/:repo', function (req, res) {
+// app.get('/repo/:owner/:repo', function (req, res) {
 
-  var url = rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo + '/' + POSURL;
-  getInfoFromApi(url, res);
-});
+//   var url = rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo + '/' + POSURL;
+//   getInfoFromApi(url, res);
+// });
 
 app.get('/fullrepo/:owner/:repo', function (req, res) {
 
@@ -94,14 +95,19 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
       console.log("first request");
       var info = JSON.parse(body);
       data.info = info;
+    }else{
+      console.log(error + " status code: " + response.statusCode);
+      data.info = "NOT FOUND";
     }
-
     options.url = baseUrl + '/stats/commit_activity' + POSURL;
     request(options, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         console.log("second request");
         var info = JSON.parse(body);
         data.commits = info;
+      }else{
+        console.log(error + " status code: " + response.statusCode);
+        data.commits = "NOT FOUND";
       }
 
       options.url = baseUrl + '/stats/contributors' + POSURL;
@@ -111,7 +117,8 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
           var info = JSON.parse(body);
           data.contributores = info;
         }else{
-          console.log(error);
+          console.log(error + " status code: " + response.statusCode);
+          data.contributores = "NOT FOUND";
         }
 
         options.url = baseUrl + '/contents/package.json/' + POSURL;
@@ -120,10 +127,11 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
             console.log("forth request");
             var info = JSON.parse(body);
             data.package = info;
-
-            res.send(data);
-
-          };
+          }else{
+            console.log(error + " status code: " + response.statusCode);
+            data.package = "NOT FOUND";
+          }
+          res.send(data);
         });     
       });
     });   
