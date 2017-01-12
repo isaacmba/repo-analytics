@@ -33,27 +33,16 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
       }
     },
     repoInfo:function(repo){
-      // console.log(repo.owner.login);
       console.log("get this info");
 
       $http.get('/fullrepo/'+repo.owner.login+'/'+repo.name).then(function(data){
         loginService.currentRepo=[];
-        // console.log(data.data.package);
-        if(data.data.commits !== "NOT FOUND"){
-          // console.log(data.data.commits);
-          loginService.currentRepo.push({commits:data.data.commits});
-       }
-        if(data.data.contributores !== "NOT FOUND"){
-          loginService.currentRepo.push({contributores:data.data.contributores})
-        }
-        if(data.data.info !== "NOT FOUND"){
-          loginService.currentRepo.push({info:data.data.info})
-        }
-        if(data.data.package !== "NOT FOUND"){
-          loginService.currentRepo.push({package:data.data.package})
-        }
-        console.log(loginService.currentRepo);
+        // console.log(data.data);
+        loginService.currentRepo.push(data.data)
+        // console.log(loginService.cu/rrentRepo);
+
         $state.go('userStats');
+        console.log("hi")
       }).catch(function(err){
         console.error(err);
         $state.go('login');

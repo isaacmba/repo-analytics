@@ -7,9 +7,7 @@ $scope.click = function(){
   console.log($scope.username);
     login.click($scope.username)
 }
-$scope.stats = function(){
-  
-}
+
 
 
 } ])

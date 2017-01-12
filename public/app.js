@@ -1,4 +1,4 @@
-var app  = angular.module('repoApp',['ui.router','nvd3']);
+var app  = angular.module('repoApp',['ui.router']);
 
 app.config([
   '$stateProvider',
@@ -12,7 +12,7 @@ app.config([
       })
      
       .state('userRepos',{
-        url:'/user_repos/:user',
+        url:'/user_repos',
         controller:'userData',
         templateUrl:'/templates/repos.html',
         resolve:{
@@ -26,8 +26,12 @@ app.config([
         templateUrl:'/templates/stats.html',
         resolve:{
           stats:['userStats', function(userStats){
+            console.log("here")
             // console.log("here in the app.js resolve")
-            return userStats.stats();
+            return {
+              package:userStats.getPackage(),
+              commits:userStats.getCommits()
+            };
           }]
         }
       })
