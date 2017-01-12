@@ -8,20 +8,28 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
         console.log("in service")
 
       $http.get('/repos/'+username).then(function(data){
-        console.log(data)
+        console.log(data.data)
         if(data.data.length ===0){
           $state.go('login')
         }else{
-        angular.copy(data.data,loginService.userData);
-        // console.log(loginService.userData);
+          loginService.userData = [];
+          for(var i = 0;i<data.data.length;i++){
+              for(var x = 0; x <data.data[i].length; x++){
+                loginService.userData.push(data.data[i][x]);
+              }
+            }
+            // angular.copy(data.data[i],loginService.userData.length);
+            console.log(loginService.userData);
+          }
+       
         $state.go('userRepos')
-      }
       })
+      
 
     },
      getRepos :function(){
       for(var i = 0;i<loginService.userData.length;i++){
-        console.log(loginService.userData[i].full_name)
+        // console.log(loginService.userData[i].full_name)
       }
     },
     repoInfo:function(repo){

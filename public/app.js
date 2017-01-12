@@ -1,4 +1,4 @@
-var app  = angular.module('repoApp',['ui.router']);
+var app  = angular.module('repoApp',['ui.router','nvd3']);
 
 app.config([
   '$stateProvider',
