@@ -1,4 +1,4 @@
-var app  = angular.module('repoApp',['ui.router']);
+var app  = angular.module('repoApp',['ui.router','nvd3']);
 
 app.config([
   '$stateProvider',
@@ -30,7 +30,9 @@ app.config([
             // console.log("here in the app.js resolve")
             return {
               package:userStats.getPackage(),
-              commits:userStats.getCommits()
+              commits:userStats.getCommits(),
+              contrubutores:userStats.getContributores()
+              // punches:userStats.getPunches()
             };
           }]
         }

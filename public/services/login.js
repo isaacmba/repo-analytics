@@ -3,7 +3,7 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
   loginService = {
 
     userData:[],
-    currentRepo:[],
+    currentRepo:{},
     click:function(username){
         console.log("in service")
 
@@ -36,10 +36,10 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
       console.log("get this info");
 
       $http.get('/fullrepo/'+repo.owner.login+'/'+repo.name).then(function(data){
-        loginService.currentRepo=[];
+        loginService.currentRepo={};
         // console.log(data.data);
-        loginService.currentRepo.push(data.data)
-        // console.log(loginService.cu/rrentRepo);
+        loginService.currentRepo = data.data;
+        console.log(loginService.currentRepo);
 
         $state.go('userStats');
         console.log("hi")
