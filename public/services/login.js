@@ -3,16 +3,6 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
   loginService = {
 
     userData:[],
-<<<<<<< HEAD
-    
-    click:function(user){
-      console.log(user);
-      $http.get('https://api.github.com/users/'+user.username+'/repos').then(function(data){
-        angular.copy(data.data, loginService.userData);
-      });
-    },
-
-=======
     currentRepo:[],
     click:function(username){
         console.log("in service")
@@ -69,7 +59,6 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
         $state.go('login');
       })
     }
->>>>>>> 924c1ff7c9452bb1fe05637ea91232d79cca8379
   }
   
   return loginService;

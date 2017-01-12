@@ -10,14 +10,6 @@ app.config([
         controller:'LoginCtrl',
         templateUrl:'/templates/login.html'
       })
-<<<<<<< HEAD
-      .state('userData',{
-        url:'/user',
-        controller:'navCtrl',
-        templateUrl:'/templates/userData.html'
-      })
-
-=======
      
       .state('userRepos',{
         url:'/user_repos/:user',
@@ -39,7 +31,6 @@ app.config([
           }]
         }
       })
->>>>>>> 924c1ff7c9452bb1fe05637ea91232d79cca8379
       $urlRouterProvider.otherwise('login');
    }
 
