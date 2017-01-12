@@ -5,7 +5,7 @@ var request = require('request');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var GitHubStrategy = require('passport-github2').Strategy;
-
+var expressSession = require('express-session');
 
 /**********Set Up****************/
 
@@ -43,10 +43,18 @@ var getInfoFromApi = function(url,res){
 
   request(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-      console.log(response.headers.link)
+
+      // var temp = JSON.parse(response.headers.link);
+      console.log(response.headers.link);
+      // console.log(body[0]);
+      // body.temp = response.headers.link;
+      
+      // var n = response.headers.link
       var info = JSON.parse(body);
-      res.json(info);
+    }else{
+      var info = "NOT FOUND"
     }
+    res.json(info);
   })
 }
 
@@ -61,23 +69,52 @@ app.post('/login',function(req,res,next){
   res.send(req.body);
 })
 
+
+
 //Get a list of all user repo's and return it to client
 app.get('/repos/:owner', function (req, res) {
   
-  var url = rootUrl + '/users/' + req.params.owner + '/repos' + POSURL;
-  getInfoFromApi(url, res);
+  var data = [];
+
+  var getData = function(pageCounter) {
+    var options = {
+      url: rootUrl + '/users/' + req.params.owner + '/repos' + POSURL + '&per_page=100' + '&page=' + pageCounter,
+      headers: {
+        'User-Agent': 'repo_analytics'
+      }
+    };
+    console.log('url: ' + options.url);
+    request(options, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+
+        data.push(JSON.parse(body));
+        if(body == '[]') {
+            console.log('page empty: ' + pageCounter)
+            res.send(data);
+        } else {
+            getData(pageCounter + 1);
+        }
+
+      }else{
+        var info = "NOT FOUND"
+      }
+    })
+  }
+  getData(1);
 
 });
+
+
 
 //Get specific repo and return it to the client
-app.get('/repo/:owner/:repo', function (req, res) {
+// app.get('/repo/:owner/:repo', function (req, res) {
 
-  var url = rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo + '/' + POSURL;
-  getInfoFromApi(url, res);
-});
+//   var url = rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo + '/' + POSURL;
+//   getInfoFromApi(url, res);
+// });
 
 app.get('/fullrepo/:owner/:repo', function (req, res) {
-
+  console.log("in server get func")
   var baseUrl = rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo;
   var options = {
     url: baseUrl,
@@ -94,14 +131,19 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
       console.log("first request");
       var info = JSON.parse(body);
       data.info = info;
+    }else{
+      console.log(error + " status code: " + response.statusCode);
+      data.info = "NOT FOUND";
     }
-
     options.url = baseUrl + '/stats/commit_activity' + POSURL;
     request(options, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         console.log("second request");
         var info = JSON.parse(body);
         data.commits = info;
+      }else{
+        console.log(error + " status code: " + response.statusCode);
+        data.commits = "NOT FOUND";
       }
 
       options.url = baseUrl + '/stats/contributors' + POSURL;
@@ -111,7 +153,8 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
           var info = JSON.parse(body);
           data.contributores = info;
         }else{
-          console.log(error);
+          console.log(error + " status code: " + response.statusCode);
+          data.contributores = "NOT FOUND";
         }
 
         options.url = baseUrl + '/contents/package.json/' + POSURL;
@@ -120,10 +163,22 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
             console.log("forth request");
             var info = JSON.parse(body);
             data.package = info;
-
+          }else{
+            console.log(error + " status code: " + response.statusCode);
+            data.package = "NOT FOUND";
+          }
+          options.url = baseUrl + '/stats/punch_card' + POSURL;
+          request(options, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+              console.log("fifth request");
+              var info = JSON.parse(body);
+              data.punch_card = info;
+            }else{
+              console.log(error + " status code: " + response.statusCode);
+              data.punch_card = "NOT FOUND";
+            }
             res.send(data);
-
-          };
+          }); 
         });     
       });
     });   
@@ -138,7 +193,8 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
 
 
 /////////git auth///////////
-// app.use(express.session({secret: 'mysecret'}));
+app.use(expressSession({ secret: 'mySecretKey' }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -148,8 +204,8 @@ passport.serializeUser(function(user,done){
   done(null,user);
 })
 
-passport.deserializeUser(function(obj,done){
-  done(null,obj);
+passport.deserializeUser(function(user,done){
+  done(null,user);
 })
 
 passport.use(new GitHubStrategy({
@@ -160,8 +216,8 @@ passport.use(new GitHubStrategy({
 
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function(){
-
-      return done(null,{profile:profile, accessToken:accessToken})
+      console.log(accessToken)
+      return done(null,{profile:profile._json, accessToken:accessToken})
     })
 }
 ));
@@ -169,10 +225,17 @@ passport.use(new GitHubStrategy({
 app.get('/auth/github/callback', 
   passport.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
-    console.log(req.user.accessToken)
+    console.log(req.user.profile)
     // Successful authentication, redirect home.
-    res.redirect('/user');
+    res.redirect('/');
   });
+app.get('/',function(req,res){
+  console.log(req.user)
+})
+app.get('/logout', function(req,res){
+  req.logout();
+  res.redirect('/');
+})
  
 var port = process.env.PORT || '4000';
 
