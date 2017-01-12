@@ -157,7 +157,7 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
           data.contributores = "NOT FOUND";
         }
 
-        options.url = baseUrl + '/contents/package.json/' + POSURL;
+        options.url = baseUrl + '/contents/package.json' + POSURL;
         request(options, function (error, response, body) {
           if (!error && response.statusCode == 200) {
             console.log("forth request");
