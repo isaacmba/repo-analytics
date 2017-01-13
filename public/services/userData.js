@@ -65,6 +65,8 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
           var contributor = loginService.currentRepo.contributores[i];
           if(contributor !== "NOT FOUND"){
             hello.contributores.push({key:contributor.author.login , y:contributor.total });
+          }else{
+            console.error(contributor)
           }
         }
         console.log(hello.contributores);
