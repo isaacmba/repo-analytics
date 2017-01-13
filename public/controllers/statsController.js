@@ -24,7 +24,7 @@ $scope.data = userStats.commits;
  $scope.options1 = {
             chart: {
                 type: 'pieChart',
-                height: 500,
+                height: 800,
                 x: function(d){return d.key;},
                 y: function(d){return d.y;},
                 showLabels: true,
