@@ -12,12 +12,6 @@ var router = express.Router();
 
 /*************Midleware******************/
 
-// router.param('repo', function(req, res, next, repoName) {
-
-//     req.repoName = repoName;
-//     console.log(req.user);//dev
-//     return next();
-// });
 
 /*************API Functionality***************/
 
@@ -35,7 +29,8 @@ var getInfoFromApi = function(url,res){
       var data = JSON.parse(body);
     }else{
       var data = "NOT FOUND"
-      console.log(error + " status code: " + response.statusCode + response.body);
+      console.log(options.url);
+      console.log(error + " status code: " + response.statusCode + body);
     }
     res.json(data);
   })
@@ -75,7 +70,7 @@ router.get('/:owner/:repo/punch_card', function (req, res) {
 });
 
 router.get('/:owner/list/:page', function (req, res) {
-  var url = config.rootUrl + '/users/' + req.params.owner + '/repos' + config.POSURL + '&per_page=20' + '&page=' + req.params.page;
+  var url = config.rootUrl + '/users/' + req.params.owner + '/repos' + config.POSURL + '&per_page=50' + '&page=' + req.params.page;
   console.log('Getting repoes list page: ' + req.params.page);
   getInfoFromApi(url, res);
 });

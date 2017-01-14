@@ -23,35 +23,8 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use('/repo', repo); 
 
 
-
-
 /*************API Functionality***************/
 
-// var getInfoFromApi = function(url,res){
-
-//   var options = {
-//     url: url,
-//     headers: {
-//       'User-Agent': 'repo_analytics'
-//     }
-//   };
-
-//   request(options, function (error, response, body) {
-//     if (!error && response.statusCode == 200) {
-
-//       // var temp = JSON.parse(response.headers.link);
-//       console.log(response.headers.link);
-//       // console.log(body[0]);
-//       // body.temp = response.headers.link;
-      
-//       // var n = response.headers.link
-//       var info = JSON.parse(body);
-//     }else{
-//       var info = "NOT FOUND"
-//     }
-//     res.json(info);
-//   })
-// }
 
 /*******************Event Handlers*******************/
 
@@ -67,37 +40,37 @@ app.post('/login',function(req,res,next){
 
 
 //Get a list of all user repo's and return it to client
-app.get('/repos/:owner', function (req, res) {
+// app.get('/repos/:owner', function (req, res) {
   
-  var data = [];
+//   var data = [];
 
-  var getData = function(pageCounter) {
-    var options = {
-      url: config.rootUrl + '/users/' + req.params.owner + '/repos' + config.POSURL + '&per_page=100' + '&page=' + pageCounter,
-      headers: {
-        'User-Agent': 'repo_analytics'
-      }
-    };
-    console.log('url: ' + options.url);
-    request(options, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
+//   var getData = function(pageCounter) {
+//     var options = {
+//       url: config.rootUrl + '/users/' + req.params.owner + '/repos' + config.POSURL + '&per_page=100' + '&page=' + pageCounter,
+//       headers: {
+//         'User-Agent': 'repo_analytics'
+//       }
+//     };
+//     console.log('url: ' + options.url);
+//     request(options, function (error, response, body) {
+//       if (!error && response.statusCode == 200) {
 
-        data.push(JSON.parse(body));
-        if(body == '[]') {
-            console.log('page empty: ' + pageCounter)
-            res.send(data);
-        } else {
-            getData(pageCounter + 1);
-        }
+//         data.push(JSON.parse(body));
+//         if(body == '[]') {
+//             console.log('page empty: ' + pageCounter)
+//             res.send(data);
+//         } else {
+//             getData(pageCounter + 1);
+//         }
 
-      }else{
-        var info = "NOT FOUND"
-      }
-    })
-  }
-  getData(1);
+//       }else{
+//         var info = "NOT FOUND"
+//       }
+//     })
+//   }
+//   getData(1);
 
-});
+// });
 
 
 
@@ -108,78 +81,78 @@ app.get('/repos/:owner', function (req, res) {
 //   getInfoFromApi(url, res);
 // });
 
-app.get('/fullrepo/:owner/:repo', function (req, res) {
-  console.log("in server get func")
-  var baseUrl = config.rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo;
-  var options = {
-    url: baseUrl,
-    headers: {
-      'User-Agent': 'repo_analytics'
-    }
-  };
+// app.get('/fullrepo/:owner/:repo', function (req, res) {
+//   console.log("in server get func")
+//   var baseUrl = config.rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo;
+//   var options = {
+//     url: baseUrl,
+//     headers: {
+//       'User-Agent': 'repo_analytics'
+//     }
+//   };
 
-  var data = {}; 
+//   var data = {}; 
   
-  options.url = baseUrl + config.POSURL;
-  request(options, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      console.log("first request");
-      var info = JSON.parse(body);
-      data.info = info;
-    }else{
-      console.log(error + " status code: " + response.statusCode);
-      data.info = "NOT FOUND";
-    }
-    options.url = baseUrl + '/stats/commit_activity' + config.POSURL;
-    request(options, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
-        console.log("second request");
-        var info = JSON.parse(body);
-        data.commits = info;
-      }else{
-        console.log(error + " status code: " + response.statusCode);
-        data.commits = "NOT FOUND";
-      }
+//   options.url = baseUrl + config.POSURL;
+//   request(options, function (error, response, body) {
+//     if (!error && response.statusCode == 200) {
+//       console.log("first request");
+//       var info = JSON.parse(body);
+//       data.info = info;
+//     }else{
+//       console.log(error + " status code: " + response.statusCode);
+//       data.info = "NOT FOUND";
+//     }
+//     options.url = baseUrl + '/stats/commit_activity' + config.POSURL;
+//     request(options, function (error, response, body) {
+//       if (!error && response.statusCode == 200) {
+//         console.log("second request");
+//         var info = JSON.parse(body);
+//         data.commits = info;
+//       }else{
+//         console.log(error + " status code: " + response.statusCode);
+//         data.commits = "NOT FOUND";
+//       }
 
-      options.url = baseUrl + '/stats/contributors' + config.POSURL;
-      request(options, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-          console.log("third request");
-          var info = JSON.parse(body);
-          data.contributores = info;
-        }else{
-          console.log(error + " status code: " + response.statusCode);
-          data.contributores = "NOT FOUND";
-        }
+//       options.url = baseUrl + '/stats/contributors' + config.POSURL;
+//       request(options, function (error, response, body) {
+//         if (!error && response.statusCode == 200) {
+//           console.log("third request");
+//           var info = JSON.parse(body);
+//           data.contributores = info;
+//         }else{
+//           console.log(error + " status code: " + response.statusCode);
+//           data.contributores = "NOT FOUND";
+//         }
 
-        options.url = baseUrl + '/contents/package.json' + config.POSURL;
-        request(options, function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-            console.log("forth request");
-            var info = JSON.parse(body);
-            data.package = info;
-          }else{
-            console.log(error + " status code: " + response.statusCode);
-            data.package = "NOT FOUND";
-          }
-          options.url = baseUrl + '/stats/punch_card' + config.POSURL;
-          request(options, function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-              console.log("fifth request");
-              var info = JSON.parse(body);
-              data.punch_card = info;
-            }else{
-              console.log(error + " status code: " + response.statusCode);
-              data.punch_card = "NOT FOUND";
-            }
-            res.send(data);
-          }); 
-        });     
-      });
-    });   
+//         options.url = baseUrl + '/contents/package.json' + config.POSURL;
+//         request(options, function (error, response, body) {
+//           if (!error && response.statusCode == 200) {
+//             console.log("forth request");
+//             var info = JSON.parse(body);
+//             data.package = info;
+//           }else{
+//             console.log(error + " status code: " + response.statusCode);
+//             data.package = "NOT FOUND";
+//           }
+//           options.url = baseUrl + '/stats/punch_card' + config.POSURL;
+//           request(options, function (error, response, body) {
+//             if (!error && response.statusCode == 200) {
+//               console.log("fifth request");
+//               var info = JSON.parse(body);
+//               data.punch_card = info;
+//             }else{
+//               console.log(error + " status code: " + response.statusCode);
+//               data.punch_card = "NOT FOUND";
+//             }
+//             res.send(data);
+//           }); 
+//         });     
+//       });
+//     });   
 
-  });
-});
+//   });
+// });
 
 
 
