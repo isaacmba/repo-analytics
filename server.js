@@ -7,6 +7,9 @@ var passport = require('passport');
 var GitHubStrategy = require('passport-github2').Strategy;
 var expressSession = require('express-session');
 
+var config = require('./config/config');
+var repo = require('./routes/repo');
+
 /**********Set Up****************/
 
 var app = express();
@@ -17,46 +20,38 @@ app.use(express.static('node_modules'));
 app.use(bodyParser.json());  
 app.use(bodyParser.urlencoded({extended: false}));
 
+app.use('/repo', repo); 
 
-/****************Vars*********************/
-
-var rootUrl = "https://api.github.com";
-var CLIENTID = "89e05ffc8792b80ca766";
-var CLIENTSECRET = "04fb4a8693571d21899733433ebb2dbf9cb9e85a";
-var POSURL = "?client_id=" + CLIENTID +"&client_secret=" + CLIENTSECRET;
-
-
-/**************middleware***********************/
 
 
 
 /*************API Functionality***************/
 
-var getInfoFromApi = function(url,res){
+// var getInfoFromApi = function(url,res){
 
-  var options = {
-    url: url,
-    headers: {
-      'User-Agent': 'repo_analytics'
-    }
-  };
+//   var options = {
+//     url: url,
+//     headers: {
+//       'User-Agent': 'repo_analytics'
+//     }
+//   };
 
-  request(options, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
+//   request(options, function (error, response, body) {
+//     if (!error && response.statusCode == 200) {
 
-      // var temp = JSON.parse(response.headers.link);
-      console.log(response.headers.link);
-      // console.log(body[0]);
-      // body.temp = response.headers.link;
+//       // var temp = JSON.parse(response.headers.link);
+//       console.log(response.headers.link);
+//       // console.log(body[0]);
+//       // body.temp = response.headers.link;
       
-      // var n = response.headers.link
-      var info = JSON.parse(body);
-    }else{
-      var info = "NOT FOUND"
-    }
-    res.json(info);
-  })
-}
+//       // var n = response.headers.link
+//       var info = JSON.parse(body);
+//     }else{
+//       var info = "NOT FOUND"
+//     }
+//     res.json(info);
+//   })
+// }
 
 /*******************Event Handlers*******************/
 
@@ -78,7 +73,7 @@ app.get('/repos/:owner', function (req, res) {
 
   var getData = function(pageCounter) {
     var options = {
-      url: rootUrl + '/users/' + req.params.owner + '/repos' + POSURL + '&per_page=100' + '&page=' + pageCounter,
+      url: config.rootUrl + '/users/' + req.params.owner + '/repos' + config.POSURL + '&per_page=100' + '&page=' + pageCounter,
       headers: {
         'User-Agent': 'repo_analytics'
       }
@@ -115,7 +110,7 @@ app.get('/repos/:owner', function (req, res) {
 
 app.get('/fullrepo/:owner/:repo', function (req, res) {
   console.log("in server get func")
-  var baseUrl = rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo;
+  var baseUrl = config.rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo;
   var options = {
     url: baseUrl,
     headers: {
@@ -125,7 +120,7 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
 
   var data = {}; 
   
-  options.url = baseUrl + '' + POSURL;
+  options.url = baseUrl + config.POSURL;
   request(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       console.log("first request");
@@ -135,7 +130,7 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
       console.log(error + " status code: " + response.statusCode);
       data.info = "NOT FOUND";
     }
-    options.url = baseUrl + '/stats/commit_activity' + POSURL;
+    options.url = baseUrl + '/stats/commit_activity' + config.POSURL;
     request(options, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         console.log("second request");
@@ -146,7 +141,7 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
         data.commits = "NOT FOUND";
       }
 
-      options.url = baseUrl + '/stats/contributors' + POSURL;
+      options.url = baseUrl + '/stats/contributors' + config.POSURL;
       request(options, function (error, response, body) {
         if (!error && response.statusCode == 200) {
           console.log("third request");
@@ -157,7 +152,7 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
           data.contributores = "NOT FOUND";
         }
 
-        options.url = baseUrl + '/contents/package.json' + POSURL;
+        options.url = baseUrl + '/contents/package.json' + config.POSURL;
         request(options, function (error, response, body) {
           if (!error && response.statusCode == 200) {
             console.log("forth request");
@@ -167,7 +162,7 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
             console.log(error + " status code: " + response.statusCode);
             data.package = "NOT FOUND";
           }
-          options.url = baseUrl + '/stats/punch_card' + POSURL;
+          options.url = baseUrl + '/stats/punch_card' + config.POSURL;
           request(options, function (error, response, body) {
             if (!error && response.statusCode == 200) {
               console.log("fifth request");
@@ -182,8 +177,6 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
         });     
       });
     });   
-
-  // var punchUrl = url + '/stats/punch_card';
 
   });
 });
@@ -209,9 +202,9 @@ passport.deserializeUser(function(user,done){
 })
 
 passport.use(new GitHubStrategy({
-    clientID: CLIENTID,
-    clientSecret: CLIENTSECRET,
-    callbackURL: "http://127.0.0.1:4000/auth/github/callback"
+    clientID: config.CLIENTID,
+    clientSecret: config.CLIENTSECRET,
+    callbackURL: config.CALLBACKURL
   },
 
   function(accessToken, refreshToken, profile, done) {

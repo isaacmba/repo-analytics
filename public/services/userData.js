@@ -1,9 +1,9 @@
 app.factory('userStats',['$http','$window','$state','login', function($http,$window,$state,login){
 
   var hello = {
-    // info : [],
-    // commits :[],
-    // contributores:[],
+    info : [],
+    commits :[],
+    contributores:[],
     package : [],
     
 
@@ -14,7 +14,7 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
       
     },
     isPackage : function(){
-      if(hello.package = []){
+      if(hello.package == []){
         console.log("empty package")
         hello.package = "No Technologies Found";
       }
@@ -27,7 +27,7 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
     getPackage:function(){
       console.log(loginService.currentRepo.package);
       if(loginService.currentRepo.package === "NOT FOUND"){
-
+        hello.package = []
       }
       else{
         var decoded = JSON.parse($window.atob(loginService.currentRepo.package.content))
@@ -46,7 +46,7 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
         
       }
       },
-      commits:[],
+      // commits:[],
       
       ///////commits///////
       getCommits:function(){
@@ -58,19 +58,21 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
         console.log(hello.commits);
       },
       ///////contributors//////
-      contributores:[],
+      // contributores:[],
       getContributores:function(){
-        // loginService.currentRepo.contributores;
-        for(var i =0;i<loginService.currentRepo.contributores.length;i++){
-          var contributor = loginService.currentRepo.contributores[i];
-          if(contributor !== "NOT FOUND"){
-            hello.contributores.push({key:contributor.author.login , y:contributor.total });
-          }else{
-            console.error(contributor)
-          }
-        }
-        console.log(hello.contributores);
 
+        if (loginService.currentRepo.contributores != "NOT FOUND"){
+          for(var i =0;i<loginService.currentRepo.contributores.length;i++){
+            var contributor = loginService.currentRepo.contributores[i];
+            if(contributor !== "NOT FOUND"){
+              hello.contributores.push({key:contributor.author.login , y:contributor.total });
+            }else{
+              console.error(contributor)
+            }
+          }
+          console.log(hello.contributores);
+        }
+        
       },
       //////punch card/////
     // punches:[
