@@ -55,7 +55,7 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
           loginService.currentRepo.contributores = data.data;
 
           $http.get('/repo/'+repo.owner.login+'/'+repo.name + '/content').then(function(data){
-
+            debugger;
             if(data.data != "NOT FOUND"){
               loginService.currentRepo.package = data.data;
             }

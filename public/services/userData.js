@@ -25,7 +25,7 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
     },
     //////packag.json///////
     getPackage:function(){
-
+      hello.package = [];
       if(loginService.currentRepo.package){
         var decoded = JSON.parse($window.atob(loginService.currentRepo.package.content))
         console.log(decoded)
@@ -48,6 +48,7 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
 
       ///////commits///////
       getCommits:function(){
+        hello.commits = [];
         console.log(loginService.currentRepo.commits)
         for(var i =0;i<loginService.currentRepo.commits.length;i++){
           var date = new Date(loginService.currentRepo.commits[i].week*1000);
@@ -57,7 +58,7 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
       },
       ///////contributors//////
       getContributores:function(){
-
+        hello.contributores = [];
         if (loginService.currentRepo.contributores != "NOT FOUND"){
           for(var i =0;i<loginService.currentRepo.contributores.length;i++){
             var contributor = loginService.currentRepo.contributores[i];
