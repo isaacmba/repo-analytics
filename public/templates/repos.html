@@ -1,9 +1,12 @@
 <div class='container'>
   <div class="row">
     <div class="col-md-6">
+     <div>
+        <input type="text" class="form-control input" placeholder="Repos" ng-model="repoSearch" />
+     </div>
       <ul class="list-group" >
         <h5>{{repos[0].owner.login}}</h5>
-        <li class="list-group-item" ng-repeat="repo in repos track by $index">{{repo.name}}
+        <li class="list-group-item" ng-repeat="repo in repos | filter:repoSearch">{{repo.name}}
         <a ng-click="repoInfo($index)">Click</a>
         </li>
         </ul>

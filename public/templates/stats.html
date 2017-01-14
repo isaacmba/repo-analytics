@@ -1,11 +1,22 @@
 <div class = "container">
   <div class = "row">
    
+
+    <div>
+    <h3>Commits Per Week</h3>
+    <hr>
+      <nvd3 options="options" data="data"></nvd3>
+    </div>
+<h3>Contributors</h3>
+    <hr>
+      <nvd3 options="options1" data="data1"></nvd3>
+    </div>
+
     <div class="jumbotron">
-      <a ng-click="checkPackage()">Technologies</a>
+      <!-- <a ng-click="checkPackage()">Technologies</a> -->
+      <h3>Technologies Used</h3>
       <hr>
       <p ng-repeat="package in packages">{{package}}</p>
     </div>
-
   </div>
 </div>
