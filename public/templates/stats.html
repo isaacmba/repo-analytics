@@ -16,7 +16,7 @@
       <!-- <a ng-click="checkPackage()">Technologies</a> -->
       <h3>Technologies Used</h3>
       <hr>
-      <p ng-repeat="package in packages">{{package}}</p>
+      <p ng-repeat="package in packages track by $index">{{package}}</p>
     </div>
   </div>
 </div>
