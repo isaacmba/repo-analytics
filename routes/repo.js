@@ -15,7 +15,7 @@ var router = express.Router();
 
 /*************API Functionality***************/
 
-var getInfoFromApi = function(url,res){
+var getInfoFromApi = function(url, res , retry){
 
   var options = {
     url: url,
@@ -27,12 +27,17 @@ var getInfoFromApi = function(url,res){
   request(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       var data = JSON.parse(body);
+      res.json(data);
+    }else if(retry == 0){
+      console.log('another try: ' + options.url)
+      getInfoFromApi(url, res, ++retry);
     }else{
       var data = "NOT FOUND"
       console.log(options.url);
       console.log(error + " status code: " + response.statusCode + body);
+      res.json(data);
     }
-    res.json(data);
+    
   })
 }
 
@@ -42,31 +47,31 @@ var getInfoFromApi = function(url,res){
 router.get('/:owner/:repo/info', function (req, res) {
   var url = config.rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo + config.POSURL;
   console.log('Getting info');
-  getInfoFromApi(url, res);
+  getInfoFromApi(url, res, 0);
 });
 
 router.get('/:owner/:repo/commits', function (req, res) {
   var url = config.rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo + '/stats/commit_activity' + config.POSURL;
   console.log('Getting commits');
-  getInfoFromApi(url, res);
+  getInfoFromApi(url, res, 0);
 });
 
 router.get('/:owner/:repo/contributors', function (req, res) {
   var url = config.rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo + '/stats/contributors' + config.POSURL;
   console.log('Getting contributors');
-  getInfoFromApi(url, res);
+  getInfoFromApi(url, res, 0);
 });
 
 router.get('/:owner/:repo/content', function (req, res) {
   var url = config.rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo + '/contents/package.json' + config.POSURL;
   console.log('Getting content');
-  getInfoFromApi(url, res);
+  getInfoFromApi(url, res, 0);
 });
 
 router.get('/:owner/:repo/punch_card', function (req, res) {
   var url = config.rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo + '/stats/punch_card' + config.POSURL;
   console.log('Getting punch_card');
-  getInfoFromApi(url, res);
+  getInfoFromApi(url, res, 0);
 });
 
 router.get('/:owner/list/:page', function (req, res) {
