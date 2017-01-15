@@ -8,6 +8,7 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
       package: null,
       punch_card: []
     },
+
     clear: function(){
       loginService.userData = [];
       loginService.currentRepo.contributores = [];
@@ -17,7 +18,7 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
     },
     getReposList(username, pageNum){
       console.log('get page: ' + pageNum);
-      $http.get('/repo/'+ username + '/list/' + pageNum).then(function(data){
+      $http.get('/repo/'+ username + '/list/' + pageNum+'/'+token).then(function(data){
         console.log(data.data)
         if(data.data.length === 0 || data.data === "NOT FOUND"){
           return;
@@ -32,17 +33,18 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
         loginService.getReposList(username, ++pageNum);
       })
     },
-    click:function(username){
+    click:function(username,token){
+
       loginService.clear();
       var pageNum = 1;
       console.log("Start getting repos list")
-      loginService.getReposList(username, pageNum);
+      loginService.getReposList(username, pageNum,token);
     },
-    // auth:function(){
-    //   $http.get('/auth/github').then(function(data){
-    //     console.log(data);
-    //   })
-    // },
+    auth:function(){
+      $http.get('/auth/github').then(function(data){
+        console.log(data);
+      })
+    },
     getRepos :function(){
       for(var i = 0;i<loginService.userData.length;i++){
         // console.log(loginService.userData[i].full_name)
