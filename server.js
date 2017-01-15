@@ -133,7 +133,7 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
       data.info = info;
     }else{
       console.log(error + " status code: " + response.statusCode);
-      data.info = "NOT FOUND";
+      data.info = false;
     }
     options.url = baseUrl + '/stats/commit_activity' + POSURL;
     request(options, function (error, response, body) {
@@ -143,7 +143,7 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
         data.commits = info;
       }else{
         console.log(error + " status code: " + response.statusCode);
-        data.commits = "NOT FOUND";
+        data.commits = false;
       }
 
       options.url = baseUrl + '/stats/contributors' + POSURL;
@@ -154,7 +154,7 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
           data.contributores = info;
         }else{
           console.log(error + " status code: " + response.statusCode);
-          data.contributores = "NOT FOUND";
+          data.contributores = false;
         }
 
         options.url = baseUrl + '/contents/package.json' + POSURL;
@@ -165,7 +165,7 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
             data.package = info;
           }else{
             console.log(error + " status code: " + response.statusCode);
-            data.package = "NOT FOUND";
+            data.package = false;
           }
           options.url = baseUrl + '/stats/punch_card' + POSURL;
           request(options, function (error, response, body) {
@@ -175,7 +175,7 @@ app.get('/fullrepo/:owner/:repo', function (req, res) {
               data.punch_card = info;
             }else{
               console.log(error + " status code: " + response.statusCode);
-              data.punch_card = "NOT FOUND";
+              data.punch_card = false;
             }
             res.send(data);
           }); 

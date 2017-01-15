@@ -26,7 +26,7 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
     //////packag.json///////
     getPackage:function(){
       console.log(loginService.currentRepo.package);
-      if(loginService.currentRepo.package === "NOT FOUND"){
+      if(loginService.currentRepo.package === false){
 
       }
       else{
@@ -63,7 +63,7 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
         // loginService.currentRepo.contributores;
         for(var i =0;i<loginService.currentRepo.contributores.length;i++){
           var contributor = loginService.currentRepo.contributores[i];
-          if(contributor !== "NOT FOUND"){
+          if(contributor !== false){
             hello.contributores.push({key:contributor.author.login , y:contributor.total });
           }else{
             console.error(contributor)
@@ -73,24 +73,24 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
 
       },
       //////punch card/////
-    // punches:[
+    punches:[
     //   {x:0,y:0},{x:1,y:0},{x:2,y:0},{x:3,y:0},{x:4,y:0},{x:5,y:0},{x:6,y:0},{x:7,y:0},{x:8,y:0},{x:9,y:0},{x:10,y:0},{x:11,y:0},{x:12,y:0},{x:13,y:0},{x:14,y:0},{x:15,y:0},{x:16,y:0},{x:17,y:0},{x:18,y:0},{x:19,y:0},{x:20,y:0},{x:21,y:0},{x:22,y:0},{x:23,y:0}
-    // ],
-    //   getPunches:function(){
-    //     // loginService.currentRepo.punch_card;
-    //     for(var i = 0;i<loginService.currentRepo.punch_card.length;i++){
-    //       var punch = loginService.currentRepo.punch_card[i];
-    //       for(var j = 0; j<hello.punches.length;j++){
-    //         if(hello.punches[j].x == punch[1]){
-    //           hello.punches[j].y += punch[2];
-    //         }
-    //       }
-    //       // 
-    //       // hello.punches.push(punch[2])
+    ],
+      getPunches:function(){
+        loginService.currentRepo.punch_card;
+        // for(var i = 0;i<loginService.currentRepo.punch_card.length;i++){
+        //   var punch = loginService.currentRepo.punch_card[i];
+        //   for(var j = 0; j<hello.punches.length;j++){
+        //     if(hello.punches[j].x == punch[1]){
+        //       hello.punches[j].y += punch[2];
+        //     }
+        //   }
+          // 
+          // hello.punches.push(punch[2])
 
-    //     }
-    //   }
-    }
+        }
+      }
+    
 
 
   return hello;

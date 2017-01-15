@@ -31,8 +31,8 @@ app.config([
             return {
               package:userStats.getPackage(),
               commits:userStats.getCommits(),
-              contrubutores:userStats.getContributores()
-              // punches:userStats.getPunches()
+              contrubutores:userStats.getContributores(),
+              punches:userStats.getPunches()
             };
           }]
         }
