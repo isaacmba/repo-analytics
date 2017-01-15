@@ -1,7 +1,7 @@
-app.controller('NavCtrl', ['$scope', 'login','$state', function($scope, login,$state){
-  $scope.isLoggedIn = login.isLoggedIn;
-  $scope.currentUser = login.currentUser;
-  $scope.logOut = login.logOut;
+app.controller('NavCtrl', ['$scope', 'login','$state','auth', function($scope, login,$state,auth){
+  $scope.isLoggedIn = auth.isLoggedIn;
+  $scope.currentUser = auth.currentUser;
+  $scope.logOut = auth.logOut;
   $scope.login = function(){
     login.click();
     $state.go('userRepos')
