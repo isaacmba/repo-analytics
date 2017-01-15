@@ -35,15 +35,10 @@
     
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
-        <!-- <li ng-hide="isLoggedIn()"><a href="/auth/github" >Log In</a></li> -->
-        <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" role="button" ng-show="isLoggedIn()"><strong>{{ currentUser() }}</strong> <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li ng-show="isLoggedIn()"><a href="/#/users/{{currentUser()._id}}">Profile</a></li>
-            <li ng-show="isLoggedIn()"><a href="" ng-click="logOut()">Log Out</a></li>
-            <li ng-hide="isLoggedIn()"><a href="/#!/login">Log In</a></li>
-          </ul>
-        </li>
+        <li ng-hide="isLoggedIn()"><a href="/auth/github" >Log In</a></li>
+        <li ng-show="isLoggedIn()">{{username}}{{avatar}}</li>
+        <li  ><a href="/logout">Logout</a></li>
+    
       </ul>
     </div>
   </div>

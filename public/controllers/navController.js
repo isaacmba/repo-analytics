@@ -6,4 +6,5 @@ app.controller('NavCtrl', ['$scope', 'login','$state', function($scope, login,$s
     login.click();
     $state.go('userRepos')
   }
+
 }]);

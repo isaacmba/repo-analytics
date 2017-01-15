@@ -25,7 +25,6 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
     },
     //////packag.json///////
     getPackage:function(){
-<<<<<<< HEAD
       console.log(loginService.currentRepo.package);
       if(loginService.currentRepo.package === false){
 
@@ -34,7 +33,6 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
 
       hello.package = [];
       if(loginService.currentRepo.package){
->>>>>>> 53a665bf35bf5da876e350e783149d6a930bfda7
         var decoded = JSON.parse($window.atob(loginService.currentRepo.package.content))
         console.log(decoded)
         if(decoded.dependencies){
@@ -52,7 +50,8 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
       else{
         hello.package.push("No Technologies Found");
       }
-    },
+    }
+  },
 
       ///////commits///////
       getCommits:function(){
@@ -76,7 +75,6 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
             }else{
               console.error(contributor)
             }
->>>>>>> 53a665bf35bf5da876e350e783149d6a930bfda7
           }
           console.log(hello.contributores);
         }
@@ -84,25 +82,31 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
       },
       //////punch card/////
     punches:[
-    //   {x:0,y:0},{x:1,y:0},{x:2,y:0},{x:3,y:0},{x:4,y:0},{x:5,y:0},{x:6,y:0},{x:7,y:0},{x:8,y:0},{x:9,y:0},{x:10,y:0},{x:11,y:0},{x:12,y:0},{x:13,y:0},{x:14,y:0},{x:15,y:0},{x:16,y:0},{x:17,y:0},{x:18,y:0},{x:19,y:0},{x:20,y:0},{x:21,y:0},{x:22,y:0},{x:23,y:0}
+      {x:0,y:0},{x:1,y:0},{x:2,y:0},{x:3,y:0},{x:4,y:0},{x:5,y:0},{x:6,y:0},{x:7,y:0},{x:8,y:0},{x:9,y:0},{x:10,y:0},{x:11,y:0},{x:12,y:0},{x:13,y:0},{x:14,y:0},{x:15,y:0},{x:16,y:0},{x:17,y:0},{x:18,y:0},{x:19,y:0},{x:20,y:0},{x:21,y:0},{x:22,y:0},{x:23,y:0}
     ],
       getPunches:function(){
-        loginService.currentRepo.punch_card;
-        // for(var i = 0;i<loginService.currentRepo.punch_card.length;i++){
-        //   var punch = loginService.currentRepo.punch_card[i];
-        //   for(var j = 0; j<hello.punches.length;j++){
-        //     if(hello.punches[j].x == punch[1]){
-        //       hello.punches[j].y += punch[2];
-        //     }
-        //   }
-          // 
-          // hello.punches.push(punch[2])
+        
+        for(var i = 0;i<loginService.currentRepo.punch_card.length;i++){
+          var punch = loginService.currentRepo.punch_card[i];
+          for(var j = 0; j<hello.punches.length;j++){
+            if(hello.punches[j].x == punch[1]){
+              hello.punches[j].y += punch[2];
+              break;
+            }
+          }
+          
 
         }
+        // for(var i = 0;i<loginService.currentRepo.punch_card.length;i++){
+        //   loginService.currentRepo.punch_card[i].splice(0,1)
+        // }
+        // hello.punches = loginService.currentRepo.punch_card;
+
       }
+    }
     
 
-}
+
   return hello;
 
 }])

@@ -4,6 +4,7 @@ var express = require('express');
 var request = require('request');
 var bodyParser = require('body-parser');
 var passport = require('passport');
+var cookieParser= require('cookie-parser')
 var GitHubStrategy = require('passport-github2').Strategy;
 var expressSession = require('express-session');
 
@@ -155,7 +156,6 @@ app.post('/login',function(req,res,next){
 
 //   });
 // });
->>>>>>> 53a665bf35bf5da876e350e783149d6a930bfda7
 
 
 
@@ -163,14 +163,16 @@ app.post('/login',function(req,res,next){
 
 /////////git auth///////////
 app.use(expressSession({ secret: 'mySecretKey' }));
-
+app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.get('/auth/github',passport.authenticate('github'));
 
 passport.serializeUser(function(user,done){
+  console.log(user.accessToken)
   done(null,user);
+
 })
 
 passport.deserializeUser(function(user,done){
@@ -185,7 +187,7 @@ passport.use(new GitHubStrategy({
 
   function(accessToken, refreshToken, profile, done) {
     process.nextTick(function(){
-      console.log(accessToken)
+      console.log(profile._json)
       return done(null,{profile:profile._json, accessToken:accessToken})
     })
 }
@@ -194,18 +196,21 @@ passport.use(new GitHubStrategy({
 app.get('/auth/github/callback', 
   passport.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
-    console.log(req.user.profile)
+    // console.log(req.user.profile)
     // Successful authentication, redirect home.
-    res.redirect('/');
+    res.redirect('/#!/user_repos');
   });
 app.get('/',function(req,res){
   console.log(req.user)
 })
 app.get('/logout', function(req,res){
   req.logout();
+  console.log(req)
   res.redirect('/');
 })
  
+
+
 var port = process.env.PORT || '4000';
 
 app.listen(port);
