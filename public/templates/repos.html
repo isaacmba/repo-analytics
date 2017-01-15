@@ -7,7 +7,8 @@
       <ul class="list-group" >
         <h5>{{repos[0].owner.login}}</h5>
         <li class="list-group-item" ng-repeat="repo in repos | filter:repoSearch">{{repo.name}}
-        <a ng-click="repoInfo(repo)">Click</a>
+        <i class="glyphicon glyphicon-circle-arrow-right" ng-click="repoInfo(repo)"></i>
+
         </li>
         </ul>
     </div>

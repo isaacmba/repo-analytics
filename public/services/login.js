@@ -38,6 +38,11 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
       console.log("Start getting repos list")
       loginService.getReposList(username, pageNum);
     },
+    // auth:function(){
+    //   $http.get('/auth/github').then(function(data){
+    //     console.log(data);
+    //   })
+    // },
     getRepos :function(){
       for(var i = 0;i<loginService.userData.length;i++){
         // console.log(loginService.userData[i].full_name)
@@ -55,12 +60,20 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
           loginService.currentRepo.contributores = data.data;
 
           $http.get('/repo/'+repo.owner.login+'/'+repo.name + '/content').then(function(data){
-            debugger;
             if(data.data != "NOT FOUND"){
               loginService.currentRepo.package = data.data;
             }
+            
+            $http.get('/repo/'+repo.owner.login+'/'+repo.name + '/punch_card').then(function(data){
+              loginService.currentRepo.punch_card = data.data;
+            // debugger;
+
             $state.go('userStats');
- 
+
+            }).catch(function(err){
+              console.error(err)
+            })
+
           }).catch(function(err){
             console.error(err);
           })
@@ -101,7 +114,7 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
       // })
 
       // loginService.currentRepo={};
-    }
+    },
   }
   
   return loginService;

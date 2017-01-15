@@ -6,4 +6,6 @@ $scope.repoInfo = function(repo){
   login.repoInfo(repo);
 };
 
+
+
 }]);
