@@ -1,55 +1,108 @@
 app.factory('login',['$http','$window','$state', function($http,$window,$state){
 
   loginService = {
-
     userData:[],
-    currentRepo:{},
-    click:function(username){
-        console.log("in service")
-
-      $http.get('/repos/'+username).then(function(data){
-        console.log(data.data)
-        if(data.data.length ===0){
-          $state.go('login')
-        }else{
-          loginService.userData = [];
-          for(var i = 0;i<data.data.length;i++){
-              for(var x = 0; x <data.data[i].length; x++){
-                loginService.userData.push(data.data[i][x]);
-              }
-            }
-            // angular.copy(data.data[i],loginService.userData.length);
-            console.log(loginService.userData);
-          }
-       
-        $state.go('userRepos')
-      })
-      
-
+    currentRepo:{
+      contributores: [],
+      commits: [],
+      package: null,
+      punch_card: []
     },
-     getRepos :function(){
+    clear: function(){
+      loginService.userData = [];
+      loginService.currentRepo.contributores = [];
+      loginService.currentRepo.commits = [];
+      loginService.currentRepo.punch_card = [];
+      loginService.currentRepo.package = null;
+    },
+    getReposList(username, pageNum){
+      console.log('get page: ' + pageNum);
+      $http.get('/repo/'+ username + '/list/' + pageNum).then(function(data){
+        console.log(data.data)
+        if(data.data.length === 0 || data.data === "NOT FOUND"){
+          return;
+        }else{
+          for(var i = 0;i<data.data.length;i++){
+            loginService.userData.push(data.data[i]);
+          }
+          if(pageNum === 1){
+            $state.go('userRepos');
+          } 
+        }
+        loginService.getReposList(username, ++pageNum);
+      })
+    },
+    click:function(username){
+      loginService.clear();
+      var pageNum = 1;
+      console.log("Start getting repos list")
+      loginService.getReposList(username, pageNum);
+    },
+    getRepos :function(){
       for(var i = 0;i<loginService.userData.length;i++){
         // console.log(loginService.userData[i].full_name)
       }
     },
     repoInfo:function(repo){
-      console.log("get this info");
 
-      $http.get('/fullrepo/'+repo.owner.login+'/'+repo.name).then(function(data){
-        loginService.currentRepo={};
-        // console.log(data.data);
-        loginService.currentRepo = data.data;
-        console.log(loginService.currentRepo);
+      loginService.clear();
 
-        $state.go('userStats');
-        console.log("hi")
+      $http.get('/repo/'+repo.owner.login+'/'+repo.name + '/commits').then(function(data){
+
+        loginService.currentRepo.commits = data.data;
+
+        $http.get('/repo/'+repo.owner.login+'/'+repo.name + '/contributors').then(function(data){
+          loginService.currentRepo.contributores = data.data;
+
+          $http.get('/repo/'+repo.owner.login+'/'+repo.name + '/content').then(function(data){
+            debugger;
+            if(data.data != "NOT FOUND"){
+              loginService.currentRepo.package = data.data;
+            }
+            $state.go('userStats');
+ 
+          }).catch(function(err){
+            console.error(err);
+          })
+
+        }).catch(function(err){
+          console.error(err);
+        })
+
       }).catch(function(err){
         console.error(err);
         $state.go('login');
       })
+
+      
+      // $http.get('/repo/'+repo.owner.login+'/'+repo.name + '/punch_card').then(function(data){
+
+      //   loginService.currentRepo.punch_card = data.data;
+      //   // angular.copy(data.data, loginService.currentRepo.contributores);
+      //   //console.log(loginService.currentRepo.punch_card);
+      //   $state.go('userStats');
+      // }).catch(function(err){
+      //   console.error(err);
+      //   $state.go('login');
+      // })
+
+
+      // $http.get('/fullrepo/'+repo.owner.login+'/'+repo.name).then(function(data){
+      //   loginService.currentRepo={};
+      //   // console.log(data.data);
+      //   loginService.currentRepo = data.data;
+      //   console.log(loginService.currentRepo);
+
+      //   $state.go('userStats');
+      //   console.log("hi")
+      // }).catch(function(err){
+      //   console.error(err);
+      //   $state.go('login');
+      // })
+
+      // loginService.currentRepo={};
     }
   }
   
   return loginService;
 }])
-//headers:{'User-Agent':'request'}

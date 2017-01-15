@@ -6,7 +6,7 @@ $scope.click = function(){
 
   console.log("in controller");
   console.log($scope.username);
-    login.click($scope.username)
+  login.click($scope.username);
 }
    
 
