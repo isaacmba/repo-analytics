@@ -2,10 +2,8 @@ app.controller('userData',['$scope','login','$state',function($scope,login,$stat
 
 $scope.repos = login.userData;
 
-$scope.repoInfo = function(index){
-  login.repoInfo($scope.repos[index]);
-}
-
-
+$scope.repoInfo = function(repo){
+  login.repoInfo(repo);
+};
 
 }]);

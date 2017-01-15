@@ -1,9 +1,10 @@
-app.controller('statsCtrl', ['userStats','$scope', function(userStats,$scope){
-
+app.controller('statsCtrl', ['userStats','$scope' ,  function(userStats, $scope){
+debugger;
 $scope.packages = userStats.package;
 $scope.checkPackage = function(){
   userStats.getPackage();
 }
+
 $scope.commits= userStats.commits;
 $scope.contributores = userStats.contributores;
 

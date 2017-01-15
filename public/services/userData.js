@@ -1,9 +1,9 @@
 app.factory('userStats',['$http','$window','$state','login', function($http,$window,$state,login){
 
   var hello = {
-    // info : [],
-    // commits :[],
-    // contributores:[],
+    info : [],
+    commits :[],
+    contributores:[],
     package : [],
     
 
@@ -14,7 +14,7 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
       
     },
     isPackage : function(){
-      if(hello.package = []){
+      if(hello.package == []){
         console.log("empty package")
         hello.package = "No Technologies Found";
       }
@@ -25,11 +25,16 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
     },
     //////packag.json///////
     getPackage:function(){
+<<<<<<< HEAD
       console.log(loginService.currentRepo.package);
       if(loginService.currentRepo.package === false){
 
       }
       else{
+
+      hello.package = [];
+      if(loginService.currentRepo.package){
+>>>>>>> 53a665bf35bf5da876e350e783149d6a930bfda7
         var decoded = JSON.parse($window.atob(loginService.currentRepo.package.content))
         console.log(decoded)
         if(decoded.dependencies){
@@ -43,13 +48,15 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
           hello.package.push(Object.keys(decoded.devDependencies)[i]);
         console.log(hello.package);
         }
-        
       }
-      },
-      commits:[],
-      
+      else{
+        hello.package.push("No Technologies Found");
+      }
+    },
+
       ///////commits///////
       getCommits:function(){
+        hello.commits = [];
         console.log(loginService.currentRepo.commits)
         for(var i =0;i<loginService.currentRepo.commits.length;i++){
           var date = new Date(loginService.currentRepo.commits[i].week*1000);
@@ -58,19 +65,22 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
         console.log(hello.commits);
       },
       ///////contributors//////
-      contributores:[],
       getContributores:function(){
-        // loginService.currentRepo.contributores;
-        for(var i =0;i<loginService.currentRepo.contributores.length;i++){
-          var contributor = loginService.currentRepo.contributores[i];
-          if(contributor !== false){
-            hello.contributores.push({key:contributor.author.login , y:contributor.total });
-          }else{
-            console.error(contributor)
-          }
-        }
-        console.log(hello.contributores);
 
+        hello.contributores = [];
+        if (loginService.currentRepo.contributores != "NOT FOUND"){
+          for(var i =0;i<loginService.currentRepo.contributores.length;i++){
+            var contributor = loginService.currentRepo.contributores[i];
+            if(contributor.author){
+              hello.contributores.push({key:contributor.author.login , y:contributor.total });
+            }else{
+              console.error(contributor)
+            }
+>>>>>>> 53a665bf35bf5da876e350e783149d6a930bfda7
+          }
+          console.log(hello.contributores);
+        }
+        
       },
       //////punch card/////
     punches:[
@@ -92,7 +102,7 @@ app.factory('userStats',['$http','$window','$state','login', function($http,$win
       }
     
 
-
+}
   return hello;
 
 }])
