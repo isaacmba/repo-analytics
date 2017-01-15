@@ -1,9 +1,10 @@
 app.controller('statsCtrl', ['userStats','$scope' ,  function(userStats, $scope){
-debugger;
+
 $scope.packages = userStats.package;
 $scope.checkPackage = function(){
   userStats.getPackage();
 }
+
 
 $scope.commits= userStats.commits;
 $scope.contributores = userStats.contributores;
@@ -44,6 +45,54 @@ $scope.data = userStats.commits;
         };
 
 $scope.data1 = userStats.contributores;
+
+$scope.options3 = {
+            chart: {
+                type: 'scatterChart',
+                height: 450,
+                color: d3.scale.category10().range(),
+                scatter: {
+                    onlyCircles: false
+                },
+                showDistX: true,
+                showDistY: true,
+                tooltipContent: function(key) {
+                    return '<h3>' + key + '</h3>';
+                },
+                duration: 350,
+                xAxis: {
+                    axisLabel: 'Hour',
+                    tickFormat: function(d){
+                        return d +":00";
+                    }
+                },
+                yAxis: {
+                    axisLabel: 'Commits',
+                    tickFormat: function(d){
+                        return d;
+                    },
+                    axisLabelDistance: -5
+                },
+                zoom: {
+                    //NOTE: All attributes below are optional
+                    enabled: false,
+                    scaleExtent: [1, 10],
+                    useFixedDomain: false,
+                    useNiceScale: false,
+                    horizontalOff: false,
+                    verticalOff: false,
+                    unzoomEventType: 'dblclick.zoom'
+                }
+            }
+        };
+
+
+$scope.data3 =  [
+            {
+                "key" : "Commits" ,
+                "values" :  userStats.punches
+            }];
+
 
 
 }])
