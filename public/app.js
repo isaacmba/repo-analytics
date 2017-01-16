@@ -10,7 +10,11 @@ app.config([
         controller:'LoginCtrl',
         templateUrl:'/templates/login.html'
       })
-     
+     .state('home',{
+      url:'/home',
+      controller:'LoginCtrl',
+      templateUrl:'templates/home.html'
+     })
       .state('userRepos',{
         url:'/user_repos',
         controller:'userData',
@@ -37,7 +41,22 @@ app.config([
           }]
         }
       })
-      $urlRouterProvider.otherwise('login');
+      .state('profile',{
+        url:'/profile/:token',
+        controller:'userData',
+        templateUrl:'/templates/profile.html',
+        resolve:{
+          profile:['auth','$stateParams', function(auth,$stateParams){
+              return{
+                saveToken:auth.saveToken($stateParams.token),
+                currentUser:auth.currentUser(),
+                currentAvatar:auth.currentAvatar()
+              }
+            }
+          ]}
+        })
+    
+      $urlRouterProvider.otherwise('home');
    }
 
 

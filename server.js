@@ -7,11 +7,13 @@ var passport = require('passport');
 var cookieParser= require('cookie-parser')
 var GitHubStrategy = require('passport-github2').Strategy;
 var expressSession = require('express-session');
-
+var expressJWT = require('express-jwt');
+var jwt = require('jsonwebtoken');
 var config = require('./config/config');
 var repo = require('./routes/repo');
 
 /**********Set Up****************/
+var auth = expressJWT({secret:"myLittleSecret"})
 
 var app = express();
 
@@ -39,128 +41,6 @@ app.post('/login',function(req,res,next){
 })
 
 
-
-//Get a list of all user repo's and return it to client
-// app.get('/repos/:owner', function (req, res) {
-  
-//   var data = [];
-
-//   var getData = function(pageCounter) {
-//     var options = {
-//       url: config.rootUrl + '/users/' + req.params.owner + '/repos' + config.POSURL + '&per_page=100' + '&page=' + pageCounter,
-//       headers: {
-//         'User-Agent': 'repo_analytics'
-//       }
-//     };
-//     console.log('url: ' + options.url);
-//     request(options, function (error, response, body) {
-//       if (!error && response.statusCode == 200) {
-
-//         data.push(JSON.parse(body));
-//         if(body == '[]') {
-//             console.log('page empty: ' + pageCounter)
-//             res.send(data);
-//         } else {
-//             getData(pageCounter + 1);
-//         }
-
-//       }else{
-//         var info = "NOT FOUND"
-//       }
-//     })
-//   }
-//   getData(1);
-
-// });
-
-
-
-//Get specific repo and return it to the client
-// app.get('/repo/:owner/:repo', function (req, res) {
-
-//   var url = rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo + '/' + POSURL;
-//   getInfoFromApi(url, res);
-// });
-
-// app.get('/fullrepo/:owner/:repo', function (req, res) {
-//   console.log("in server get func")
-//   var baseUrl = config.rootUrl + '/repos/' + req.params.owner + '/' + req.params.repo;
-//   var options = {
-//     url: baseUrl,
-//     headers: {
-//       'User-Agent': 'repo_analytics'
-//     }
-//   };
-
-//   var data = {}; 
-  
-
-
-//   options.url = baseUrl + config.POSURL;
-//   request(options, function (error, response, body) {
-//     if (!error && response.statusCode == 200) {
-//       console.log("first request");
-//       var info = JSON.parse(body);
-//       data.info = info;
-//     }else{
-//       console.log(error + " status code: " + response.statusCode);
-//       data.info = "NOT FOUND";
-//     }
-//     options.url = baseUrl + '/stats/commit_activity' + config.POSURL;
-//     request(options, function (error, response, body) {
-//       if (!error && response.statusCode == 200) {
-//         console.log("second request");
-//         var info = JSON.parse(body);
-//         data.commits = info;
-//       }else{
-//         console.log(error + " status code: " + response.statusCode);
-//         data.commits = "NOT FOUND";
-//       }
-
-//       options.url = baseUrl + '/stats/contributors' + config.POSURL;
-//       request(options, function (error, response, body) {
-//         if (!error && response.statusCode == 200) {
-//           console.log("third request");
-//           var info = JSON.parse(body);
-//           data.contributores = info;
-//         }else{
-//           console.log(error + " status code: " + response.statusCode);
-//           data.contributores = "NOT FOUND";
-//         }
-
-//         options.url = baseUrl + '/contents/package.json' + config.POSURL;
-//         request(options, function (error, response, body) {
-//           if (!error && response.statusCode == 200) {
-//             console.log("forth request");
-//             var info = JSON.parse(body);
-//             data.package = info;
-//           }else{
-//             console.log(error + " status code: " + response.statusCode);
-//             data.package = "NOT FOUND";
-//           }
-//           options.url = baseUrl + '/stats/punch_card' + config.POSURL;
-//           request(options, function (error, response, body) {
-//             if (!error && response.statusCode == 200) {
-//               console.log("fifth request");
-//               var info = JSON.parse(body);
-//               data.punch_card = info;
-//             }else{
-//               console.log(error + " status code: " + response.statusCode);
-//               data.punch_card = "NOT FOUND";
-//             }
-//             res.send(data);
-//           }); 
-//         });     
-//       });
-//     });   
-
-//   });
-// });
-
-
-
-
-
 /////////git auth///////////
 app.use(expressSession({ secret: 'mySecretKey' }));
 app.use(cookieParser());
@@ -171,11 +51,14 @@ app.get('/auth/github',passport.authenticate('github'));
 
 passport.serializeUser(function(user,done){
   console.log(user.accessToken)
+  console.log("22")
   done(null,user);
 
 })
 
 passport.deserializeUser(function(user,done){
+  console.log("212")
+  console.log(user)
   done(null,user);
 })
 
@@ -194,22 +77,27 @@ passport.use(new GitHubStrategy({
 ));
 
 app.get('/auth/github/callback', 
-  passport.authenticate('github', { failureRedirect: '/login' }),
+  passport.authenticate('github', { failureRedirect: '/' }),
   function(req, res) {
     // console.log(req.user.profile)
     // Successful authentication, redirect home.
-    res.redirect('/#!/user_repos');
+    var user = {username:req.user.profile.login,token:req.user.accessToken, avatar:req.user.profile.avatar_url};
+    var token =jwt.sign(user, 'myLittleSecret', {expiresIn:120} )
+    res.redirect('/#!/profile/'+token);
   });
 app.get('/',function(req,res){
   console.log(req.user)
 })
 app.get('/logout', function(req,res){
   req.logout();
-  console.log(req)
+  // console.log(req)
   res.redirect('/');
 })
+// function ensureAuthenticated(req, res, next) {
+//   if (req.isAuthenticated()) { return next(); }
+//   res.redirect('/user_repos')
+// }
  
-
 
 var port = process.env.PORT || '4000';
 

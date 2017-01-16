@@ -2,6 +2,9 @@
 var express = require('express');
 var request = require('request');
 var config = require('../config/config');
+var passport = require('passport');
+
+var GitHubStrategy = require('passport-github2').Strategy;
 
 
 /*************SETUP******************/
@@ -74,10 +77,12 @@ router.get('/:owner/:repo/punch_card', function (req, res) {
   getInfoFromApi(url, res, 0);
 });
 
-router.get('/:owner/list/:page', function (req, res) {
-  var url = config.rootUrl + '/users/' + req.params.owner + '/repos' + config.POSURL + '&per_page=50' + '&page=' + req.params.page;
-  console.log('Getting repoes list page: ' + req.params.page);
-  getInfoFromApi(url, res);
+router.get('/:owner/list/:page/:token', function (req, res) {
+ var url = config.rootUrl + '/users/' + req.params.owner + '/repos' + config.POSURL + '&per_page=50' + '&page=' + req.params.page;
+ if(req.params.token != 0){
+   url = config.rootUrl + '/user/repos?access_token=' + req.params.token + '&per_page=50' + '&page=' + req.params.page;
+ }
+ console.log('Getting repoes list page: ' + req.params.page);
+ getInfoFromApi(url, res);
 });
-
 module.exports = router;

@@ -8,7 +8,9 @@ $scope.click = function(){
   console.log($scope.username);
   login.click($scope.username);
 }
-   
+$scope.git = function(){
+  login.git();
+}
 
 
 
