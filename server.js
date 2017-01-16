@@ -51,7 +51,7 @@ app.post('/login',function(req,res,next){
 /***********test**********/
 
 app.get('/:owner/:repo/info', function (req, res) {
-  analyze.getInfo(req.params.owner, req.params.repo, function(id,err){
+  analyze.analyzeRepo(req.params.owner, req.params.repo, function(id,err){
      if(err){
     console.error(err)
    }else{

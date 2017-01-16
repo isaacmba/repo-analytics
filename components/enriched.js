@@ -65,6 +65,37 @@ enriched.commits= function(id,sendId){
 enriched.info= function(id){};
 enriched.content= function(id){};
 enriched.contributors= function(id){};
-enriched.punchCard= function(id){};
+
+enriched.punchCard = function(id, sendId){
+  enrichedPunchCard = [];
+  RawData.findById(id,function(err,data){
+    if(err)
+    {
+      console.log(err);
+    }else{
+      console.log(data);
+      for(var i =0;i<data.punch_card.length;i++){
+        punchCard = {
+          hour: data.punch_card[i][1],
+          commits: data.punch_card[i][2]
+        }
+        enrichedPunchCard.push(punchCard);
+      }
+      var enrichedData =  new EnrichedData();
+       enrichedData.punch_card = enrichedPunchCard;
+       enrichedData.save(function(err,data){
+         if(err){
+           console.log(err);
+         }else{
+           console.log(data._id)
+           sendId(data._id);
+         }
+       })
+    }
+    
+
+      
+  });
+};
 
 module.exports = enriched;
