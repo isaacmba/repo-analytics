@@ -209,6 +209,7 @@ analyze.getInfo = function(owner, repo, Data, sendId){
 analyze.getCommits = function(owner,repo, Data, sendId) {
   
   console.log('analyze getting commits');
+
   
   var url = config.rootUrl + '/repos/' + owner + '/' + repo + '/stats/commit_activity' + config.POSURL
   
@@ -221,7 +222,7 @@ analyze.getCommits = function(owner,repo, Data, sendId) {
           sendId(null,err);
         }
         else{
-          // console.log(data._id)
+          // console.log(data.commits)
           sendId(data,null)
         }
       })
@@ -261,7 +262,7 @@ analyze.getPunchCard = function(owner, repo, Data, sendId) {
   var options = analyze.createOptionsObj(url, 0);
 
   analyze.getSinglePageFromApi(options, function(data){
-    Data.punch_card = data;
+    Data.punch_card = data; 
     Data.save(function(err,data){
       if(err){
         sendId(null,err);

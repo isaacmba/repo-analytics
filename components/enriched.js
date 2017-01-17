@@ -34,7 +34,7 @@ enriched.repoList = function(id ,sendId){
         if(err){
           sendId(null,err);
         }else{
-          console.log(data._id)
+          // console.log(data._id)
           sendId(data,null);
         }
       })
@@ -44,6 +44,7 @@ enriched.repoList = function(id ,sendId){
 enriched.commits= function(rawData){
   
   enrichedCommits=[];
+
   if(rawData){
     for(var i =0;i<rawData.length;i++){
       commit = {
@@ -54,8 +55,8 @@ enriched.commits= function(rawData){
     }
   }else{
     enrichedCommits = false;
-    return enrichedCommits;
   }
+  return enrichedCommits;
   
 
 };
@@ -72,13 +73,29 @@ enriched.info= function(rawData){
 
 }
 enriched.content= function(rawData){
-  if(rawData.content){
-    var content = JSON.parse(base64.decode(rawData.content)) 
-    return content;  
+  var dependencies =[];
+
+    if(rawData.content){
+    var content = JSON.parse(base64.decode(rawData.content))
+    if(content.dependencies){
+       for(var i = 0;i < Object.keys(content.dependencies).length;i++){
+        var temp = Object.keys(content.dependencies)[i].replace('.',' ');
+        // console.log(temp)
+        dependencies.push(temp)
+    }
+    }
+    if(content.devDependencies){
+       for(var i = 0;i < Object.keys(content.devDependencies).length;i++){
+        var temp = Object.keys(content.devDependencies)[i].replace('.',' ');
+        // console.log(temp)
+        dependencies.push(temp)
+    }
+    return dependencies;  
   }else{
     return false;
   }
 };
+}
 enriched.contributors= function(rawData){
   enrichedContributors = [];
   if(rawData){
@@ -86,8 +103,8 @@ enriched.contributors= function(rawData){
     for(var i=0;i<rawData.length;i++){
       for (var j = 0;j<rawData[i].length;j++){
         var contributor = {
-          name:rawData[i][j].login,
-          contributions:rawData[i][j].contributions
+          key:rawData[i][j].login,
+          y:rawData[i][j].contributions
         }
         enrichedContributors.push(contributor);
       } 
