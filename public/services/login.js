@@ -1,4 +1,4 @@
-app.factory('login',['$http','$window','$state', function($http,$window,$state){
+app.factory('login',['$http','$window','$state', function($http,$window,$state,auth){
 
   loginService = {
     userData:[],
@@ -16,9 +16,9 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
       loginService.currentRepo.punch_card = [];
       loginService.currentRepo.package = null;
     },
-    getReposList(username, pageNum){
+    getReposList(username, pageNum,token){
       console.log('get page: ' + pageNum);
-      $http.get('/repo/'+ username + '/list/' + pageNum+'/'+token).then(function(data){
+      $http.get('/repo/'+ username + '/list/' + pageNum).then(function(data){
         console.log(data.data)
         if(data.data.length === 0 || data.data === "NOT FOUND"){
           return;
@@ -33,12 +33,12 @@ app.factory('login',['$http','$window','$state', function($http,$window,$state){
         loginService.getReposList(username, ++pageNum);
       })
     },
-    click:function(username,token){
+    click:function(username){
 
       loginService.clear();
       var pageNum = 1;
       console.log("Start getting repos list")
-      loginService.getReposList(username, pageNum,token);
+      loginService.getReposList(username, pageNum);
     },
     auth:function(){
       $http.get('/auth/github').then(function(data){
