@@ -62,8 +62,30 @@ enriched.commits= function(id,sendId){
       })
   })
 };
-enriched.info= function(id){};
-enriched.content= function(id){};
+enriched.info= function(id,sendId){
+  RawData.findById(id,function(err,data){
+    // console.log(data.info);
+      info = {
+        repo_name:data.info.name,
+        stargazers_count:data.info.stargazers_count,
+        forks:data.info.forks
+      }
+      // console.log(info)
+      var enrichedData = new EnrichedData();
+      enrichedData.info = info;
+      enrichedData.save(function(err,data){
+        if(err){
+          console.log(err);
+        }else{
+          console.log(data._id)
+          sendId(data._id);
+        }
+      }) 
+  });
+}
+enriched.content= function(id,sendId){
+  RawData.findById()
+};
 enriched.contributors= function(id){};
 enriched.punchCard= function(id){};
 

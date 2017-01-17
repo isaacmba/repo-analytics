@@ -50,6 +50,22 @@ app.post('/login',function(req,res,next){
 
 /***********test**********/
 
+app.get('/:owner/list', function (req, res){
+  analyze.getRepos(req.params.owner, function(id,err){
+     if(err){
+    console.error(err)
+   }else{
+    enriched.repoList(id,function(id,err){
+      if(err){
+        console.error(err);
+      }else{
+        console.log(id)
+      }
+    })
+    
+   }
+  })
+})
 app.get('/:owner/:repo/info', function (req, res) {
   analyze.getInfo(req.params.owner, req.params.repo, function(id,err){
      if(err){
@@ -67,22 +83,6 @@ app.get('/:owner/:repo/info', function (req, res) {
 
   })
 });
-app.get('/:owner/list', function (req, res){
-  analyze.getRepos(req.params.owner, function(id,err){
-     if(err){
-    console.error(err)
-   }else{
-    enriched.repoList(id,function(id,err){
-      if(err){
-        console.error(err);
-      }else{
-        console.log(id)
-      }
-    })
-    
-   }
-  })
-})
 app.get('/:owner/:repo/commits', function (req, res){
   analyze.getCommits(req.params.owner, req.params.repo, function(id,err){
      if(err){
