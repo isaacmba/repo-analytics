@@ -6,7 +6,8 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var router = express.Router();
 
-var RawData = require('../models/rawDataModel')
+var Data = require('../models/DataModel')
+var RepoList = require('../models/ListModel')
 
 var analyze = {};
 
@@ -33,7 +34,7 @@ analyze.getSinglePageFromApi = function(options, sendData){
     if (!error && response.statusCode == 200) {
       var data = JSON.parse(body);
     }else{
-      var data = "NOT FOUND"
+      var data = false
       console.log(options.url);
       console.log(error + " status code: " + response.statusCode + body);
     }
@@ -72,7 +73,7 @@ analyze.getSinglePageFromApi = function(options, sendData){
 
 
 /*************************************/
-analyze.getContributors = function(owner, repo, rawData, sendId) {
+analyze.getContributors = function(owner, repo, Data, sendId) {
 
   console.log('analyze getting contributors');
   var page = 1;
@@ -89,12 +90,12 @@ analyze.getContributors = function(owner, repo, rawData, sendId) {
        if (!error && response.statusCode == 200) {
          var d = JSON.parse(body);
          if(d.length === 0){
-           rawData.contributors = data;
-           rawData.save(function(err,data){
+           Data.contributors = data;
+           Data.save(function(err,data){
             if(err){
               sendId(null,err);
             }else{
-              sendId(rawData,null)
+              sendId(Data,null)
             }
            })
            return;
@@ -103,7 +104,7 @@ analyze.getContributors = function(owner, repo, rawData, sendId) {
            console.log(d.length)
            getInfoFromApi(url, ++page);
        }else{
-         config.data = "NOT FOUND"
+         data = false
          console.log(options.url);
          console.log(error + " status code: " + response.statusCode + body);
          // res.json(data);
@@ -144,9 +145,9 @@ analyze.getRepos = function(owner,sendId){
          if(d.length === 0){
 
            //stop save to DB
-           var rawData = new RawData();
-           rawData.repoList = data;
-           rawData.save(function(err,data){
+           var repoList = new RepoList();
+           repoList.repoList = data;
+           repoList.save(function(err,data){
             if(err){
               sendId(null,err);
             }else{
@@ -159,7 +160,7 @@ analyze.getRepos = function(owner,sendId){
            console.log(d.length)
            getInfoFromApi(url, ++page);
        }else{
-         config.data = "NOT FOUND"
+         data = false
          console.log(options.url);
          console.log(error + " status code: " + response.statusCode + body);
          // res.json(data);
@@ -183,7 +184,7 @@ getInfoFromApi(url,page)
 
 //////get repo info//////
 // router.get('/:owner/:repo/info', function (req, res) {
-analyze.getInfo = function(owner, repo, rawData, sendId){
+analyze.getInfo = function(owner, repo, Data, sendId){
 
   console.log('analyze getting info');
   
@@ -192,21 +193,20 @@ analyze.getInfo = function(owner, repo, rawData, sendId){
   var options = analyze.createOptionsObj(url, 0);
 
   analyze.getSinglePageFromApi(options, function(data){
-    rawData.info = data;
-    rawData.save(function(err,data){
+    Data.info = data;
+    Data.save(function(err,data){
       if(err){
         sendId(null,err);
       }
       else{
-        // console.log(data._id)
-        sendId(rawData,null)
+        sendId(data,null)
       }
     })
   })
 };
 
 ///////get commits///////
-analyze.getCommits = function(owner,repo, rawData, sendId) {
+analyze.getCommits = function(owner,repo, Data, sendId) {
   
   console.log('analyze getting commits');
   
@@ -215,14 +215,14 @@ analyze.getCommits = function(owner,repo, rawData, sendId) {
   var options = analyze.createOptionsObj(url, 0);
 
   analyze.getSinglePageFromApi(options, function(data){
-      rawData.commits = data;
-      rawData.save(function(err,data){
+      Data.commits = data;
+      Data.save(function(err,data){
         if(err){
           sendId(null,err);
         }
         else{
           // console.log(data._id)
-          sendId(rawData,null)
+          sendId(data,null)
         }
       })
     })
@@ -230,7 +230,7 @@ analyze.getCommits = function(owner,repo, rawData, sendId) {
 
 
 
-analyze.getContent = function(owner,repo,rawData,sendId){
+analyze.getContent = function(owner,repo,Data,sendId){
   
   console.log('analyze getting content');
   
@@ -239,20 +239,20 @@ analyze.getContent = function(owner,repo,rawData,sendId){
   var options = analyze.createOptionsObj(url, 0);
 
   analyze.getSinglePageFromApi(options, function(data){
-      rawData.content = data;
-      rawData.save(function(err,data){
+      Data.content = data;
+      Data.save(function(err,data){
         if(err){
           sendId(null,err);
         }
         else{
           // console.log(data._id)
-          sendId(rawData,null)
+          sendId(data,null)
         }
       })
     })
 };
 
-analyze.getPunchCard = function(owner, repo, rawData, sendId) {
+analyze.getPunchCard = function(owner, repo, Data, sendId) {
   
   console.log('Getting punch card');
   
@@ -261,14 +261,14 @@ analyze.getPunchCard = function(owner, repo, rawData, sendId) {
   var options = analyze.createOptionsObj(url, 0);
 
   analyze.getSinglePageFromApi(options, function(data){
-    rawData.punch_card = data;
-    rawData.save(function(err,data){
+    Data.punch_card = data;
+    Data.save(function(err,data){
       if(err){
         sendId(null,err);
       }
       else{
         // console.log(data._id)
-        sendId(rawData,null)
+        sendId(data,null)
       }
     })
   })
@@ -277,28 +277,28 @@ analyze.getPunchCard = function(owner, repo, rawData, sendId) {
 
 
 analyze.analyzeRepo = function(owner, repo, sendId){
-  var rawData = new RawData();
-  analyze.getInfo(owner, repo, rawData, function(rawData, err){
+  var data = new Data();
+  analyze.getInfo(owner, repo, data, function(data, err){
     if(err){
       console.error(err);
     }else{
-      analyze.getCommits(owner, repo, rawData, function(rawData, err){
+      analyze.getCommits(owner, repo, data, function(data, err){
         if(err){
           console.error(err);
         }else{
-          analyze.getContributors(owner, repo, rawData, function(rawData, err){
+          analyze.getContributors(owner, repo, data, function(data, err){
             if(err){
               console.error(err);
             }else{
-              analyze.getContent(owner, repo, rawData, function(rawData, err){
+              analyze.getContent(owner, repo, data, function(data, err){
                 if(err){
                   console.error(err);
                 }else{
-                  analyze.getPunchCard(owner, repo, rawData, function(rawData, err){
+                  analyze.getPunchCard(owner, repo,data , function(data, err){
                     if(err){
                       console.error(err);
                     }else{           
-                      sendId(rawData.id);
+                      sendId(data.id);
                     }
                   })
                 }
