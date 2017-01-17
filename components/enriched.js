@@ -64,7 +64,8 @@ enriched.commits= function(id,sendId){
 };
 enriched.info= function(id){};
 enriched.content= function(id){};
-enriched.contributors= function(id){};
+enriched.contributors= function(id){
+};
 
 enriched.punchCard = function(id, sendId){
   enrichedPunchCard = [];
