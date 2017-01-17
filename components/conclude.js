@@ -12,6 +12,7 @@ conclude.concludeInfo = function(data){
   for(var i = data.length-1; i >=0; i--){
     if(data[i].total > 0){
       // console.log(data[i])
+
       return data[i].week;  
     }
   }
@@ -22,6 +23,7 @@ conclude.concludeCommits= function(data){
  
   for(var i=0;i<data.length;i++){
     data.week = new Date(data[i].week*1000)
+
   }
   return data;
 }

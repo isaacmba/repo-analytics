@@ -2,35 +2,42 @@
 <!-- user info -->
   <div class="row">
     <div class="col-md-8">
-      <h3>{{repo.info.repo_name}} created by, {{repo.info.owner}}</h3>
+      <h3>{{repo.info.repo_name}}</h3>
+      <hr>
       <div>
-        <h3>Commits Per Week</h3>
+        <h4>Commits Per Week</h4>
       <hr>
       <nvd3 options="options" data="commitData"></nvd3>
       <hr>
-      <h3>Last committed at, {{last_commit}}</h3>
+      <h5>Last committed at, {{last_commit}}</h5>
       </div>
       <hr>
-      <br>
+
       <div>
-        {{repo.popularity}}
+        <h4>Repo Popularity</h4>
+
       </div>
       <hr>
-      <br>
+
       <div>
         <!-- {{repo.contributors}} -->
+        <h4>Contributors to {{repo.info.repo_name}}</h4>
         <nvd3 options="pie" data="contributors"></nvd3>
       </div>
     </div>
     <div class="col-md-4">
       <div>
         <img id="avatar" src="{{repo.info.avatar}}" class="rounded float-right">
+        {{repo.info.owner}}
       </div>
-      <br>
+
       <hr>
-      <div class="jumbotron" ng-repeat="tech in technologies">
+      <div class="jumbotron" >
       <h3>Technologies</h3>
+      <ul ng-repeat="tech in technologies">
         {{tech}}
+      </ul>
+        
         
       </div>
         
