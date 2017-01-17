@@ -3,13 +3,14 @@ var express = require('express');
 var config = require('../config/config');
 var mongoose = require('mongoose');
 var router = express.Router();
+var base64 = require('base-64');
 
 var EnrichedData = require('../models/EnrichedData')
 var RawData = require('../models/rawDataModel')
 
 
 var enriched={};
-
+  
 enriched.repoList = function(id ,sendId){
   enrichedRepoList=[];
   RawData.findById(id,function(err,data){
@@ -29,7 +30,7 @@ enriched.repoList = function(id ,sendId){
       enrichedData.repoList = enrichedRepoList;
       enrichedData.save(function(err,data){
         if(err){
-          console.log(err);
+          sendId(err);
         }else{
           console.log(data._id)
           sendId(data._id);
@@ -38,63 +39,84 @@ enriched.repoList = function(id ,sendId){
   })
 
 };
-enriched.commits= function(id,sendId){
+enriched.commits= function(rawData){
+  
   enrichedCommits=[];
-  RawData.findById(id,function(err,data){
-    // console.log(data.commits)
-    for(var i =0;i<data.commits.length;i++){
+  
+    for(var i =0;i<rawData.length;i++){
       commit = {
-        week:data.commits[i].week,
-        total:data.commits[i].total
+        week:rawData[i].week,
+        total:rawData[i].total
       }
       enrichedCommits.push(commit);
     }
-    // console.log(enrichedCommits);
-     var enrichedData =  new EnrichedData();
-      enrichedData.commits = enrichedCommits;
-      enrichedData.save(function(err,data){
-        if(err){
-          console.log(err);
-        }else{
-          console.log(data._id)
-          sendId(data._id);
-        }
-      })
-  })
+    return enrichedCommits;
+  
+
 };
-enriched.info= function(id){};
-enriched.content= function(id){};
-enriched.contributors= function(id){
+enriched.info= function(rawData){
+
+      info = {
+        repo_name:rawData.name,
+        stargazers_count:rawData.stargazers_count,
+        forks:rawData.forks
+      }
+      return info;
+
+}
+enriched.content= function(rawData){
+  var content = base64.decode(rawData.content)
+    return content;  
+};
+enriched.contributors= function(rawData){
+  enrichedContributors = [];
+ 
+    for(var i=0;i<rawData.length;i++){
+      for (var j = 0;j<rawData[i].length;j++){
+        var contributor = {
+          name:rawData[i][j].login,
+          contributions:rawData[i][j].contributions
+        }
+        enrichedContributors.push(contributor);
+      } 
+    }
+    return enrichedContributors;
 };
 
-enriched.punchCard = function(id, sendId){
+enriched.punchCard = function(rawData){
   enrichedPunchCard = [];
-  RawData.findById(id,function(err,data){
-    if(err)
-    {
-      console.log(err);
-    }else{
-      console.log(data);
-      for(var i =0;i<data.punch_card.length;i++){
+
+      for(var i =0;i<rawData.length;i++){
         punchCard = {
-          hour: data.punch_card[i][1],
-          commits: data.punch_card[i][2]
+          hour: rawData[i][1],
+          commits: rawData[i][2]
         }
         enrichedPunchCard.push(punchCard);
       }
-      var enrichedData =  new EnrichedData();
-       enrichedData.punch_card = enrichedPunchCard;
-       enrichedData.save(function(err,data){
-         if(err){
-           console.log(err);
-         }else{
-           console.log(data._id)
-           sendId(data._id);
-         }
-       })
-    }
-  
-  });
+      return enrichedPunchCard
 };
+
+enriched.enrichRepo = function(rawDataId, sendId){
+  var enrichedData = new EnrichedData();
+  RawData.findById(rawDataId,function(err,data){
+    if(err){
+      console.error(err)
+    }else{
+      console.log("enrich me")
+      enrichedData.info = enriched.info(data.info);
+      enrichedData.commits = enriched.commits(data.commits);
+      enrichedData.content=enriched.content(data.content);
+      enrichedData.contributors = enriched.contributors(data.contributors);
+      enrichedData.punch_card = enriched.punchCard(data.punch_card);
+      enrichedData.save(function(err,data){
+        if(err){
+          sendId(null,err)
+        }else{
+          sendId(data._id,null)
+        }
+      })
+    }
+  })
+}
 
 module.exports = enriched;
