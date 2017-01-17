@@ -3,8 +3,8 @@ var mongoose = require('mongoose');
 var EnrichedDataSchema = new mongoose.Schema({
   repoList:Array,
   info:Object,
-  commits:Object,
-  contributors:Object,
+  commits:Array,
+  contributors:Array,
   punch_card:Object,
   content:Object
 

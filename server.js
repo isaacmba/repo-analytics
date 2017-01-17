@@ -50,19 +50,20 @@ app.post('/login',function(req,res,next){
 
 /***********test**********/
 
+
+
 app.get('/repo/:owner/:repo', function (req, res) {
   analyze.analyzeRepo(req.params.owner, req.params.repo, function(id, err){
     if(err){
     console.error(err)
     }else{
-    // enriched.info(id,function(id,err){
-    //   if(err){
-    //     console.error(err);
-    //   }else{
-    //     console.log(id)
-    //   }
-    // })
-    console.log(id);
+    enriched.enrichRepo(id,function(id,err){
+      if(err){
+        console.error(err);
+      }else{
+        console.log(id)
+      }
+    })
     }
   })
 });
@@ -70,6 +71,7 @@ app.get('/repo/:owner/:repo', function (req, res) {
 app.get('/:owner/list', function (req, res){
   analyze.getRepos(req.params.owner, function(id,err){
     if(err){
+
     console.error(err)
     }else{
       console.log(id);
