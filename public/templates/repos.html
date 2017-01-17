@@ -2,12 +2,12 @@
   <div class="row">
     <div class="col-md-6">
      <div>
-        <input type="text" class="form-control input" placeholder="Repos" ng-model="repoSearch" />
+        <input type="text" class="form-control input" placeholder="Repos" ng-model="repoSearch"/>
      </div>
       <ul class="list-group" >
-        <h5>{{repos[0].owner.login}}</h5>
-        <li class="list-group-item" ng-repeat="repo in repos | filter:repoSearch">{{repo.name}}
-          <a href="" class="icon"> <i class="glyphicon glyphicon-circle-arrow-right" ng-click="repoInfo(repo)"></i></a>
+        <h5>{{repos[0].owner}}</h5>
+        <li class="list-group-item" ng-repeat="repo in repos | filter: repoSearch track by $index">{{repo.name}}
+          <a href="" class="icon" ng-click="getStats(repo)"> <i class="glyphicon glyphicon-circle-arrow-right"></i></a>
         </li>
         </ul>
     </div>

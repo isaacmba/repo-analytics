@@ -1,32 +1,31 @@
-app.controller('statsCtrl', ['userStats','$scope' ,  function(userStats, $scope){
+app.controller('statsCtrl',['data','$scope',function(data,$scope){
+  $scope.commits = data.repoData.commits;
 
-$scope.packages = userStats.package;
-$scope.checkPackage = function(){
-  userStats.getPackage();
-}
+  $scope.info = data.repoData.info;
+  $scope.punch_card = data.repoData.punch_card;
+  $scope.technologies= data.repoData.content;
+  $scope.repo = data.repoData;
+  $scope.last_commit = data.repoData.info.last_commit;
+//////graphs///////
+//   $scope.options = {
+//             chart: {
+//                 type: 'sparklinePlus',
+//                 height: 250,
+//                 x: function(d, i){return i;},
+//                 xTickFormat: function(d) {
+//                     return d3.time.format('%x')(new Date($scope.commitData[d].x))
+//                 },
+//                 duration: 250
+//             }
+//       };
 
+// $scope.commitData = data.repoData.commits;
+console.log(data.repoData)
 
-$scope.commits= userStats.commits;
-$scope.contributores = userStats.contributores;
-
- $scope.options = {
-            chart: {
-                type: 'sparklinePlus',
-                height: 450,
-                x: function(d, i){return i;},
-                xTickFormat: function(d) {
-                    return d3.time.format('%x')(new Date($scope.data[d].x))
-                },
-                duration: 250
-            }
-      };
-
-$scope.data = userStats.commits;
-
- $scope.options1 = {
+$scope.pie = {
             chart: {
                 type: 'pieChart',
-                height: 800,
+                height: 400,
                 x: function(d){return d.key;},
                 y: function(d){return d.y;},
                 showLabels: true,
@@ -44,55 +43,5 @@ $scope.data = userStats.commits;
             }
         };
 
-$scope.data1 = userStats.contributores;
-
-$scope.options3 = {
-            chart: {
-                type: 'scatterChart',
-                height: 450,
-                color: d3.scale.category10().range(),
-                scatter: {
-                    onlyCircles: false
-                },
-                showDistX: true,
-                showDistY: true,
-                tooltipContent: function(key) {
-                    return '<h3>' + key + '</h3>';
-                },
-                duration: 350,
-                xAxis: {
-                    axisLabel: 'Hour',
-                    tickFormat: function(d){
-                        return d +":00";
-                    }
-                },
-                yAxis: {
-                    axisLabel: 'Commits',
-                    tickFormat: function(d){
-                        return d;
-                    },
-                    axisLabelDistance: -5
-                },
-                zoom: {
-                    //NOTE: All attributes below are optional
-                    enabled: false,
-                    scaleExtent: [1, 10],
-                    useFixedDomain: false,
-                    useNiceScale: false,
-                    horizontalOff: false,
-                    verticalOff: false,
-                    unzoomEventType: 'dblclick.zoom'
-                }
-            }
-        };
-
-
-$scope.data3 =  [
-            {
-                "key" : "Commits" ,
-                "values" :  userStats.punches
-            }];
-
-
-
+$scope.contributors = data.repoData.contributors;
 }])

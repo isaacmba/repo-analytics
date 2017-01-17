@@ -17,9 +17,9 @@
 
 
 </head>
-<body ng-app="repoApp" ng-controller="LoginCtrl" ng-cloak>
+<body ng-app="repoApp" ng-cloak>
 <!-- navbar -->
-<nav class="navbar custom-nav navbar-default navbar-static-top" ng-controller="NavCtrl">
+<nav class="navbar custom-nav navbar-default navbar-static-top" >
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -33,15 +33,15 @@
       </a>
     </div>
     
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <!-- <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav navbar-right">
-<!--         <li ng-hide="isLoggedIn()"><a href="/auth/github" >Log In</a></li> -->
-        <li><a href="/#!/login">Search Public Repos</a></li>
-        <!-- <li ng-show="isLoggedIn()">{{username}}{{avatar}}</li> -->
+     <li ng-hide="isLoggedIn()"><a href="/auth/github" >Log In</a></li> 
+         <li><a href="/#!/login">Search Public Repos</a></li> 
+         <li ng-show="isLoggedIn()">{{username}}{{avatar}}</li> 
         <li ng-show="isLoggedIn()"><a href="" ng-click="logOut()">Logout</a></li>
     
       </ul>
-    </div>
+    </div> -->
   </div>
 </nav> 
 
@@ -49,12 +49,9 @@
 
 
   <script src="app.js"></script>
-  <script src="services/login.js"></script>
-  <script src="services/userData.js"></script>
-  <script src="services/auth.js"></script>
-  <script src="controllers/loginController.js"></script>
-  <script src="controllers/userDataController.js"></script>
-  <script src="controllers/navController.js"></script>
+  <script src="services/dataService.js"></script>
+  <script src="controllers/searchController.js"></script>
+  <script src="controllers/userReposController.js"></script>
   <script src="controllers/statsController.js"></script>
 
 
