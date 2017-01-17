@@ -5,35 +5,37 @@ var mongoose = require('mongoose');
 var router = express.Router();
 var base64 = require('base-64');
 
-var EnrichedData = require('../models/EnrichedData')
-var RawData = require('../models/rawDataModel')
+
+var Data = require('../models/DataModel')
+var RepoList = require('../models/ListModel')
 
 
 var enriched={};
   
 enriched.repoList = function(id ,sendId){
   enrichedRepoList=[];
-  RawData.findById(id,function(err,data){
+  RepoList.findById(id,function(err,data){
     // console.log(data.repoList[0][]);
     for(var i=0;i<data.repoList.length;i++){
       for (var j = 0;j<data.repoList[i].length;j++){
         var repo ={
-          name: data.repoList[i][j].owner.login,
+          owner: data.repoList[i][j].owner.login,
           description:data.repoList[i][j].description,
           created_at:data.repoList[i][j].created_at,
+          name:data.repoList[i][j].name
+
         }
         enrichedRepoList.push(repo);
       }
     }
       // console.log(enrichedRepoList);
-      var enrichedData =  new EnrichedData();
-      enrichedData.repoList = enrichedRepoList;
-      enrichedData.save(function(err,data){
+      data.repoList = enrichedRepoList
+      data.save(function(err,data){
         if(err){
-          sendId(err);
+          sendId(null,err);
         }else{
           console.log(data._id)
-          sendId(data._id);
+          sendId(data,null);
         }
       })
   })
@@ -42,7 +44,7 @@ enriched.repoList = function(id ,sendId){
 enriched.commits= function(rawData){
   
   enrichedCommits=[];
-  
+  if(rawData){
     for(var i =0;i<rawData.length;i++){
       commit = {
         week:rawData[i].week,
@@ -50,7 +52,10 @@ enriched.commits= function(rawData){
       }
       enrichedCommits.push(commit);
     }
+  }else{
+    enrichedCommits = false;
     return enrichedCommits;
+  }
   
 
 };
@@ -59,17 +64,24 @@ enriched.info= function(rawData){
       info = {
         repo_name:rawData.name,
         stargazers_count:rawData.stargazers_count,
-        forks:rawData.forks
+        forks:rawData.forks,
+        owner:rawData.owner.login,
+        avatar:rawData.owner.avatar_url
       }
       return info;
 
 }
 enriched.content= function(rawData){
-  var content = base64.decode(rawData.content)
+  if(rawData.content){
+    var content = JSON.parse(base64.decode(rawData.content)) 
     return content;  
+  }else{
+    return false;
+  }
 };
 enriched.contributors= function(rawData){
   enrichedContributors = [];
+  if(rawData){
  
     for(var i=0;i<rawData.length;i++){
       for (var j = 0;j<rawData[i].length;j++){
@@ -80,7 +92,10 @@ enriched.contributors= function(rawData){
         enrichedContributors.push(contributor);
       } 
     }
-    return enrichedContributors;
+  }else{
+    enrichedContributors = false;
+  }
+  return enrichedContributors;
 };
 
 enriched.punchCard = function(rawData){
@@ -97,18 +112,28 @@ enriched.punchCard = function(rawData){
 };
 
 enriched.enrichRepo = function(rawDataId, sendId){
-  var enrichedData = new EnrichedData();
-  RawData.findById(rawDataId,function(err,data){
+  // var dbData = new Data();
+  Data.findById(rawDataId,function(err,data){
     if(err){
-      console.error(err)
+      console.error(err);
     }else{
       console.log("enrich me")
-      enrichedData.info = enriched.info(data.info);
-      enrichedData.commits = enriched.commits(data.commits);
-      enrichedData.content=enriched.content(data.content);
-      enrichedData.contributors = enriched.contributors(data.contributors);
-      enrichedData.punch_card = enriched.punchCard(data.punch_card);
-      enrichedData.save(function(err,data){
+      if(data.info){
+        data.info = enriched.info(data.info);
+      }
+      if(data.commits){
+        data.commits = enriched.commits(data.commits);
+      }
+      if(data.content){      
+        data.content = enriched.content(data.content);
+      }      
+      if(data.contributors){
+        data.contributors = enriched.contributors(data.contributors);
+      }
+      if(data.punch_card){
+        data.punch_card = enriched.punchCard(data.punch_card);
+      }
+      data.save(function(err,data){
         if(err){
           sendId(null,err)
         }else{

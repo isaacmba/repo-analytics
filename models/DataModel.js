@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var RawDataSchema = new mongoose.Schema({
-  repoList:Array,
+
   info:Object,
   commits:Object,
   contributors:Object,
@@ -10,6 +10,6 @@ var RawDataSchema = new mongoose.Schema({
 
 })
 
-var RawData = mongoose.model('RawData',RawDataSchema);
+var Data = mongoose.model('Data',RawDataSchema);
 
-module.exports = RawData;
+module.exports = Data;
