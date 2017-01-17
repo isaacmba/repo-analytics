@@ -10,8 +10,8 @@ var expressJWT = require('express-jwt');
 var jwt = require('jsonwebtoken');
 var config = require('./config/config');
 var analyze = require('./components/analyze'); 
-var mongoose = require('mongoose');
 var enriched = require('./components/enriched'); 
+var mongoose = require('mongoose');
 
 
 
@@ -50,105 +50,109 @@ app.post('/login',function(req,res,next){
 
 /***********test**********/
 
-app.get('/:owner/list', function (req, res){
-  analyze.getRepos(req.params.owner, function(id,err){
-     if(err){
-    console.error(err)
-   }else{
-    enriched.repoList(id,function(id,err){
-      if(err){
-        console.error(err);
-      }else{
-        console.log(id)
-      }
-    })
-    
-   }
-  })
-})
-app.get('/:owner/:repo/info', function (req, res) {
-  analyze.getInfo(req.params.owner, req.params.repo, function(id,err){
-     if(err){
-    console.error(err)
-   }else{
-    enriched.info(id,function(id,err){
-      if(err){
-        console.error(err);
-      }else{
-        console.log(id)
-      }
-    })
-    
-   }
 
+
+app.get('/repo/:owner/:repo', function (req, res) {
+  analyze.analyzeRepo(req.params.owner, req.params.repo, function(id, err){
+    if(err){
+    console.error(err)
+    }else{
+    // enriched.info(id,function(id,err){
+    //   if(err){
+    //     console.error(err);
+    //   }else{
+    //     console.log(id)
+    //   }
+    // })
+    console.log(id);
+    }
   })
 });
-app.get('/:owner/:repo/commits', function (req, res){
-  analyze.getCommits(req.params.owner, req.params.repo, function(id,err){
-     if(err){
-    console.error(err)
-   }else{
-    enriched.commits(id,function(id,err){
-      if(err){
-        console.error(err);
-      }else{
-        console.log(id)
-      }
-    })
-    
-   }
-  })
-})
 
-app.get('/:owner/:repo/contributors', function (req, res) {
-  analyze.getContributors(req.params.owner, req.params.repo, function(id,err){
-   if(err){
-    console.error(err)
-   }else{
-    enriched.contributors(id,function(id,err){
-      if(err){
-        console.error(err);
-      }else{
-        console.log(id)
-      }
-    })
-    
-   }
-  })
-})
-app.get('/:owner/:repo/content', function (req, res) {
-  analyze.getContent(req.params.owner, req.params.repo, function(id,err){
-     if(err){
-    console.error(err)
-   }else{
-    enriched.content(id,function(id,err){
-      if(err){
-        console.error(err);
-      }else{
-        console.log(id)
-      }
-    })
-    
-   }
-  })
-})
-app.get('/:owner/:repo/punch_card', function (req, res){
-  analyze.getPunchCard(req.params.owner, req.params.repo, function(id,err){
-     if(err){
-    console.error(err)
-   }else{
-    enriched.punchCard(id,function(id,err){
-      if(err){
-        console.error(err);
-      }else{
-        console.log(id)
-      }
-    })
-    
-   }
+app.get('/:owner/list', function (req, res){
+  analyze.getRepos(req.params.owner, function(id,err){
+    if(err){
 
+    console.error(err)
+    }else{
+      console.log(id);
+      // enriched.repoList(id,function(id,err){
+      // if(err){
+      //   console.error(err);
+      // }else{
+      //   console.log(id)
+      // }
+      // })
+    }
   })
-})
+});
+
+// app.get('/:owner/:repo/commits', function (req, res){
+//   analyze.getCommits(req.params.owner, req.params.repo, function(id,err){
+//      if(err){
+//     console.error(err)
+//    }else{
+//     enriched.commits(id,function(id,err){
+//       if(err){
+//         console.error(err);
+//       }else{
+//         console.log(id)
+//       }
+//     })
+    
+//    }
+//   })
+// })
+
+// app.get('/:owner/:repo/contributors', function (req, res) {
+//   analyze.getContributors(req.params.owner, req.params.repo, function(id,err){
+//    if(err){
+//     console.error(err)
+//    }else{
+//     enriched.contributors(id,function(id,err){
+//       if(err){
+//         console.error(err);
+//       }else{
+//         console.log(id)
+//       }
+//     })
+    
+//    }
+//   })
+// })
+// app.get('/:owner/:repo/content', function (req, res) {
+//   analyze.getContent(req.params.owner, req.params.repo, function(id,err){
+//      if(err){
+//     console.error(err)
+//    }else{
+//     enriched.content(id,function(id,err){
+//       if(err){
+//         console.error(err);
+//       }else{
+//         console.log(id)
+//       }
+//     })
+    
+//    }
+//   })
+// })
+// app.get('/:owner/:repo/punch_card', function (req, res){
+//   analyze.getPunchCard(req.params.owner, req.params.repo, function(id,err){
+//      if(err){
+//     console.error(err)
+//    }else{
+//     enriched.punchCard(id,function(id,err){
+//       if(err){
+//         console.error(err);
+//       }else{
+//         console.log(id)
+//       }
+//     })
+    
+//    }
+
+//   })
+// })
 
 
 /*************************/
