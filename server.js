@@ -11,6 +11,8 @@ var jwt = require('jsonwebtoken');
 var config = require('./config/config');
 var analyze = require('./components/analyze'); 
 var enriched = require('./components/enriched'); 
+var conclude = require('./components/conclude'); 
+var produce = require('./components/produce');
 var mongoose = require('mongoose');
 
 
@@ -31,7 +33,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 // app.use('/repo', repo); 
 // app.use('/', analyze)
 
-var RawData = require('./models/rawDataModel')
+// var RawData = require('./models/DataModel')
 /*************API Functionality***************/
 
 
@@ -55,14 +57,21 @@ app.get('/repo/:owner/:repo', function (req, res) {
     if(err){
     console.error(err)
     }else{
-    // enriched.info(id,function(id,err){
-    //   if(err){
-    //     console.error(err);
-    //   }else{
-    //     console.log(id)
-    //   }
-    // })
-    console.log(id);
+    enriched.enrichRepo(id,function(id,err){
+      if(err){
+        console.error(err);
+      }else{
+        console.log(id);
+        conclude.concludeRepo(id,function(data,err){
+          if(err){
+            console.log(err)
+          }else{
+            var x = produce.produceReport(data);
+            res.send(x);
+          }
+        })
+      }
+    })
     }
   })
 });
@@ -70,87 +79,22 @@ app.get('/repo/:owner/:repo', function (req, res) {
 app.get('/:owner/list', function (req, res){
   analyze.getRepos(req.params.owner, function(id,err){
     if(err){
+
     console.error(err)
     }else{
-      console.log(id);
-      // enriched.repoList(id,function(id,err){
-      // if(err){
-      //   console.error(err);
-      // }else{
-      //   console.log(id)
-      // }
-      // })
+      // console.log(id);
+      enriched.repoList(id,function(data,err){
+      if(err){
+        console.error(err);
+      }else{
+        // console.log(data)
+        res.send(data)
+     
+      }
+      })
     }
   })
 });
-
-// app.get('/:owner/:repo/commits', function (req, res){
-//   analyze.getCommits(req.params.owner, req.params.repo, function(id,err){
-//      if(err){
-//     console.error(err)
-//    }else{
-//     enriched.commits(id,function(id,err){
-//       if(err){
-//         console.error(err);
-//       }else{
-//         console.log(id)
-//       }
-//     })
-    
-//    }
-//   })
-// })
-
-// app.get('/:owner/:repo/contributors', function (req, res) {
-//   analyze.getContributors(req.params.owner, req.params.repo, function(id,err){
-//    if(err){
-//     console.error(err)
-//    }else{
-//     enriched.contributors(id,function(id,err){
-//       if(err){
-//         console.error(err);
-//       }else{
-//         console.log(id)
-//       }
-//     })
-    
-//    }
-//   })
-// })
-// app.get('/:owner/:repo/content', function (req, res) {
-//   analyze.getContent(req.params.owner, req.params.repo, function(id,err){
-//      if(err){
-//     console.error(err)
-//    }else{
-//     enriched.content(id,function(id,err){
-//       if(err){
-//         console.error(err);
-//       }else{
-//         console.log(id)
-//       }
-//     })
-    
-//    }
-//   })
-// })
-// app.get('/:owner/:repo/punch_card', function (req, res){
-//   analyze.getPunchCard(req.params.owner, req.params.repo, function(id,err){
-//      if(err){
-//     console.error(err)
-//    }else{
-//     enriched.punchCard(id,function(id,err){
-//       if(err){
-//         console.error(err);
-//       }else{
-//         console.log(id)
-//       }
-//     })
-    
-//    }
-
-//   })
-// })
-
 
 /*************************/
 
