@@ -66,15 +66,8 @@ app.get('/repo/:owner/:repo', function (req, res) {
           if(err){
             console.log(err)
           }else{
-            produce.produceReport(data,function(data,err){
-              if(err){
-                console.error(err)
-              }else{
-                // console.log(data)
-                res.send(data)
-              }
-
-        })
+            var x = produce.produceReport(data);
+            res.send(x);
           }
         })
       }

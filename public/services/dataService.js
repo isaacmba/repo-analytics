@@ -1,7 +1,7 @@
 app.factory('data',['$http','$state', function($http,$state){
   var dataService = {};
   dataService.repoList =[];
-
+  dataService.repoData = {};
   dataService.getRepos = function(username){
 
     $http.get('/'+ username +'/list').then(function(data,err){
@@ -22,7 +22,12 @@ app.factory('data',['$http','$state', function($http,$state){
       if(err){
         console.log(err)
       }else{
-        console.log(data)
+        // console.log(data.data)
+        dataService.repoData = data.data;
+        console.log(data.data.commits)
+        console.log("switching states")
+        $state.go('userStats');
+
       }
     })
   }

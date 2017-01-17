@@ -1,1 +1,40 @@
-stats.html
+<div class="container" ng-cloak>
+<!-- user info -->
+  <div class="row">
+    <div class="col-md-8">
+      <h3>{{repo.info.repo_name}} created by, {{repo.info.owner}}</h3>
+      <div>
+        <h3>Commits Per Week</h3>
+      <hr>
+      <nvd3 options="options" data="commitData"></nvd3>
+      <hr>
+      <h3>Last committed at, {{last_commit}}</h3>
+      </div>
+      <hr>
+      <br>
+      <div>
+        {{repo.popularity}}
+      </div>
+      <hr>
+      <br>
+      <div>
+        <!-- {{repo.contributors}} -->
+        <nvd3 options="pie" data="contributors"></nvd3>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div>
+        <img id="avatar" src="{{repo.info.avatar}}" class="rounded float-right">
+      </div>
+      <br>
+      <hr>
+      <div class="jumbotron" ng-repeat="tech in technologies">
+      <h3>Technologies</h3>
+        {{tech}}
+        
+      </div>
+        
+    </div>
+  </div>
+
+</div>

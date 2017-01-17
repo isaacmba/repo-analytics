@@ -8,13 +8,16 @@ var ConcludeData = require('../models/ConclusionModel')
 var conclude ={};
 
 conclude.concludeInfo = function(data){
-  for(var i = data.length-1; i>=0;i--){
+
+  for(var i = data.length-1; i >=0; i--){
     if(data[i].total > 0){
-      console.log(data[i])
-      return data[i].week;
+      // console.log(data[i])
+      return data[i].week;  
     }
   }
-}
+  return "No commits in the past year";
+  }
+
 conclude.concludeCommits= function(data){
  
   for(var i=0;i<data.length;i++){
@@ -27,8 +30,9 @@ conclude.concludeCommits= function(data){
 conclude.concludeContent = function(data){
   var dependencies = [];
   if(data){
-    for(var i = 0;i < Object.keys(data.dependencies).length;i++){
-      dependencies.push(Object.keys(data.dependencies)[i])
+    console.log(data);
+    for(var i = 0;i < data.length;i++){
+      dependencies.push(data[i])
     }
   }else{
       dependencies.push('No technologies found');
@@ -54,9 +58,9 @@ var concludeData = new ConcludeData();
     if(err){
       console.error(err)
     }else{
+
       concludeData.info = data.info;
       concludeData.info.last_commit = conclude.concludeInfo(data.commits);
-      // console.log(concludeData.info) /
       concludeData.contributors = data.contributors;
       concludeData.commits = conclude.concludeCommits(data.commits);
       concludeData.content = conclude.concludeContent(data.content);
@@ -65,7 +69,7 @@ var concludeData = new ConcludeData();
         if(err){
           sendId(null,err)
         }else{
-          // console.log(concludeData)
+          // console.log(concludeData.info)
           sendId(data,null)
         }
       })
