@@ -53,6 +53,19 @@ conclude.concludePunchCard = function(data){
   return punch_card;
 }
 
+conclude.concludeContributors = function(contributors){
+  if(contributors.length > 30){
+    var sortedContributors = contributors.sort(function(a, b){return a.y-b.y});
+    var newContributors = [];
+    for(var i = sortedContributors.length-1; i > sortedContributors.length-16; i--){
+      newContributors.push(sortedContributors[i]);
+    }
+    console.log(newContributors);
+    return newContributors
+  }else{
+    return contributors;
+  }
+}
 
 conclude.concludeRepo = function(id, sendId){
 var concludeData = new ConcludeData();
@@ -63,7 +76,7 @@ var concludeData = new ConcludeData();
 
       concludeData.info = data.info;
       concludeData.info.last_commit = conclude.concludeInfo(data.commits);
-      concludeData.contributors = data.contributors;
+      concludeData.contributors = conclude.concludeContributors(data.contributors);
       concludeData.commits = conclude.concludeCommits(data.commits);
       concludeData.content = conclude.concludeContent(data.content);
       concludeData.punch_card =conclude.concludePunchCard(data.punch_card);
