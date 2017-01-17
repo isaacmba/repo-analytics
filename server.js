@@ -57,14 +57,13 @@ app.get('/repo/:owner/:repo', function (req, res) {
     if(err){
     console.error(err)
     }else{
-    // enriched.info(id,function(id,err){
-    //   if(err){
-    //     console.error(err);
-    //   }else{
-    //     console.log(id)
-    //   }
-    // })
-    console.log(id);
+    enriched.enrichRepo(id,function(id,err){
+      if(err){
+        console.error(err);
+      }else{
+        console.log(id)
+      }
+    })
     }
   })
 });
