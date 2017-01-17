@@ -92,9 +92,7 @@ enriched.punchCard = function(id, sendId){
          }
        })
     }
-    
-
-      
+  
   });
 };
 
