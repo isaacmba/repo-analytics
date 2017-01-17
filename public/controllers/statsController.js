@@ -25,7 +25,7 @@ console.log(data.repoData)
 $scope.pie = {
             chart: {
                 type: 'pieChart',
-                height: 400,
+                height: 500,
                 x: function(d){return d.key;},
                 y: function(d){return d.y;},
                 showLabels: true,
