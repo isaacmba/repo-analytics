@@ -9,6 +9,10 @@
       </span>
     </div>
       </form>
+      <div ng-show="error.isError" class="error">
+        <h3>Ooooops, something went wrong :(</h3> 
+        Error: "{{error.error.data.error}}", Status: {{error.error.status}}
+      </div>
     </div>
   </div>
 </div>

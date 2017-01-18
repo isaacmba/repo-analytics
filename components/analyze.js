@@ -148,9 +148,18 @@ analyze.getRepos = function(owner,sendId){
            console.log(d.length)
            getInfoFromApi(url, ++page);
        }else{
-         data.push(false);
+        if(data.length === 0){
+          var repoList = new RepoList();
+          repoList.repoList = null;
+          repoList.save(function(err,data){
+           if(err){
+             sendId(null,err);
+           }else{
+             sendId(data._id,null)
+           }
+          })
+        }
          console.log(response.body);
-
          // res.json(data);
        }
      }));

@@ -16,35 +16,40 @@ enriched.repoList = function(id ,sendId){
   enrichedRepoList=[];
   RepoList.findById(id,function(err,data){
     // console.log(data.repoList[0][]);
-    for(var i=0;i<data.repoList.length;i++){
-      for (var j = 0;j<data.repoList[i].length;j++){
-        var repo ={
-          owner: data.repoList[i][j].owner.login,
-          description:data.repoList[i][j].description,
-          created_at:data.repoList[i][j].created_at,
-          name:data.repoList[i][j].name,
-          forks: data.repoList[i][j].forks,
-          stargazers: data.repoList[i][j].stargazers_count,
-          avatar: data.repoList[i][j].owner.avatar_url
+    if(data.repoList){
+        for(var i=0;i<data.repoList.length;i++){
+          for (var j = 0;j<data.repoList[i].length;j++){
+            var repo ={
+              owner: data.repoList[i][j].owner.login,
+              description:data.repoList[i][j].description,
+              created_at:data.repoList[i][j].created_at,
+              name:data.repoList[i][j].name,
+              forks: data.repoList[i][j].forks,
+              stargazers: data.repoList[i][j].stargazers_count,
+              avatar: data.repoList[i][j].owner.avatar_url
+            }
+            if(!repo.description){
+              repo.description = 'No Description Found'
+            }
+            enrichedRepoList.push(repo);
+          }
         }
-        if(!repo.description){
-          repo.description = 'No Description Found'
-        }
-        enrichedRepoList.push(repo);
-      }
+          // console.log(enrichedRepoList);
+          data.repoList = enrichedRepoList
+          data.save(function(err,data){
+            if(err){
+              sendId(null,err);
+            }else{
+              // console.log(data._id)
+              sendId(data,null);
+            }
+          }) 
+    }else{
+      console.log('i am here')
+      sendId(null, {error: "User Not Found"});
     }
-      // console.log(enrichedRepoList);
-      data.repoList = enrichedRepoList
-      data.save(function(err,data){
-        if(err){
-          sendId(null,err);
-        }else{
-          // console.log(data._id)
-          sendId(data,null);
-        }
-      })
+    
   })
-
 };
 enriched.commits= function(rawData){
   
