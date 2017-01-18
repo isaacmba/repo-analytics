@@ -15,3 +15,13 @@
 .container .jumbotron {
 	padding-left:35px;
 }
+.description{
+	border: 1px solid black;
+  display: none;
+  font-size: 12px;
+  margin-top: 10px;
+  padding: 5px;
+}
+.list-group-item:hover .description{
+	display:block;
+} 
