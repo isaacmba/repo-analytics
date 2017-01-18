@@ -22,8 +22,10 @@ enriched.repoList = function(id ,sendId){
           owner: data.repoList[i][j].owner.login,
           description:data.repoList[i][j].description,
           created_at:data.repoList[i][j].created_at,
-          name:data.repoList[i][j].name
-
+          name:data.repoList[i][j].name,
+          forks: data.repoList[i][j].forks,
+          stargazers: data.repoList[i][j].stargazers_count,
+          avatar: data.repoList[i][j].owner.avatar_url
         }
         enrichedRepoList.push(repo);
       }
@@ -55,19 +57,19 @@ enriched.commits= function(rawData){
   
 
 };
-enriched.info= function(rawData){
+// enriched.info= function(rawData){
 
-    var info = {
-        repo_name:rawData.name,
-        stargazers_count:rawData.stargazers_count,
-        forks:rawData.forks,
-        owner:rawData.owner.login,
-        avatar:rawData.owner.avatar_url
-        }
+//     var info = {
+//         repo_name:rawData.name,
+//         stargazers_count:rawData.stargazers_count,
+//         forks:rawData.forks,
+//         owner:rawData.owner.login,
+//         avatar:rawData.owner.avatar_url
+//         }
 
-   return info;
+//    return info;
 
-}
+// }
 enriched.content= function(rawData){
   var dependencies =[];
 
@@ -127,9 +129,9 @@ enriched.enrichRepo = function(rawDataId, sendId){
       console.error(err);
     }else{
       console.log("enrich me")
-      if(data.info){
-        data.info = enriched.info(data.info);
-      }
+      // if(data.info){
+      //   data.info = enriched.info(data.info);
+      // }
       if(data.commits){
         data.commits = enriched.commits(data.commits);
       }

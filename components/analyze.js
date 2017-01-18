@@ -37,7 +37,8 @@ analyze.getSinglePageFromApi = function(options, sendData){
     }else{
       var data = false;
       console.log(options.url);
-      // console.log(error + " Body: " + body);
+      console.log(error + response);
+      console.log(response);
     }
     sendData(data);
   })
@@ -107,7 +108,7 @@ analyze.getContributors = function(owner, repo, Data, sendId) {
        }else{
          data.push(false);
          console.log(options.url);
-         console.log(error + " status code: " + response.statusCode + body);
+         console.log(error + response);
          // res.json(data);
        }
      }));
@@ -151,9 +152,9 @@ analyze.getRepos = function(owner,sendId){
            console.log(d.length)
            getInfoFromApi(url, ++page);
        }else{
-         data = false
+         data.push(false);
          console.log(options.url);
-         console.log(error + " status code: " + response.statusCode + body);
+         console.log(error + response );
          // res.json(data);
        }
      }));
@@ -175,25 +176,34 @@ getInfoFromApi(url,page)
 
 //////get repo info//////
 // router.get('/:owner/:repo/info', function (req, res) {
-analyze.getInfo = function(owner, repo, Data, sendId){
+analyze.getInfo = function(owner, repo, Data, id, sendId){
 
   console.log('analyze getting info');
   
-  var url = config.rootUrl + '/repos/' + owner + '/' + repo + config.POSURL;
+  RepoList.findById(id, function(err, data){
+    if(err){
+      sendId(null, err);
+    }else{
+      // console.log(repo);
+      console.log(data.repoList[0].name);
+      for(var i = 0; i < data.repoList.length; i++){
+        if(repo == data.repoList[i].name){
+          Data.info = data.repoList[i];
+          Data.save(function(err,data){
+            if(err){
+              sendId(null,err);
+            }
+            else{
+              console.log(data);
+              sendId(data,null)
+            }        
+          });
+        }
+      }
+    }
+    
+  });
   
-  var options = analyze.createOptionsObj(url, 0);
-
-  analyze.getSinglePageFromApi(options, function(data){
-    Data.info = data;
-    Data.save(function(err,data){
-      if(err){
-        sendId(null,err);
-      }
-      else{
-        sendId(data,null)
-      }
-    })
-  })
 };
 
 ///////get commits///////
@@ -246,7 +256,7 @@ analyze.getContent = function(owner,repo,Data,sendId){
 
 analyze.getPunchCard = function(owner, repo, Data, sendId) {
   
-  console.log('Getting punch card');
+  console.log('Analyze Getting punch card');
   
   url = config.rootUrl + '/repos/' + owner + '/' + repo + '/stats/punch_card' + config.POSURL;
   
@@ -268,9 +278,9 @@ analyze.getPunchCard = function(owner, repo, Data, sendId) {
 
 
 
-analyze.analyzeRepo = function(owner, repo, sendId){
+analyze.analyzeRepo = function(owner, repo, listId, sendId){
   var data = new Data();
-  analyze.getInfo(owner, repo, data, function(data, err){
+  analyze.getInfo(owner, repo, data, listId, function(data, err){
     if(err){
       console.error(err);
     }else{

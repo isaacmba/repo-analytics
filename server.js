@@ -52,8 +52,9 @@ app.post('/login',function(req,res,next){
 
 /***********test**********/
 
-app.get('/repo/:owner/:repo', function (req, res) {
-  analyze.analyzeRepo(req.params.owner, req.params.repo, function(id, err){
+app.get('/repo/:owner/:repo/:listId', function (req, res) {
+  console.log(req.params.listId);
+  analyze.analyzeRepo(req.params.owner, req.params.repo, req.params.listId, function(id, err){
     if(err){
     console.error(err)
     }else{
@@ -89,7 +90,6 @@ app.get('/:owner/list', function (req, res){
       }else{
         // console.log(data)
         res.send(data)
-     
       }
       })
     }

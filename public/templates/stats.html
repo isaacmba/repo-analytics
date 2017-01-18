@@ -2,7 +2,7 @@
 <!-- user info -->
   <div class="row">
     <div class="col-md-8">
-      <h3>{{repo.info.repo_name}}</h3>
+      <h3>{{repo.info.name}}</h3>
       <hr>
       <div>
         <h4>Commits Per Week</h4>
@@ -21,7 +21,7 @@
 
       <div>
         <!-- {{repo.contributors}} -->
-        <h4>Top Contributors to {{repo.info.repo_name}}</h4>
+        <h4>Top Contributors to {{repo.info.name}}</h4>
         <nvd3 options="pie" data="contributors"></nvd3>
       </div>
     </div>
