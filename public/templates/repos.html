@@ -5,10 +5,11 @@
         <input type="text" class="form-control input" placeholder="Repos" ng-model="repoSearch"/>
      </div>
       <ul class="list-group" >
-        <h5>{{repos[0].owner}}</h5>
-        <li class="list-group-item" ng-repeat="repo in repos | filter: repoSearch track by $index">{{repo.name}}
-          <a href="" class="icon" ng-click="getStats(repo)"><i class="glyphicon glyphicon-circle-arrow-right"></i></a>
-          <p class="description">{{repo.description}}</p>
+        <h4>{{repos[0].owner}}</h4>
+        <li class="list-group-item" ng-repeat="repo in repos | filter: repoSearch track by $index" ng-click="getStats(repo)"><strong>{{repo.name}}</strong>
+<!--           <a href="" class="icon" ng-click="getStats(repo)"><i class="glyphicon glyphicon-circle-arrow-right"></i></a>
+ -->            <p class="description">{{repo.description}}</p>
+    
         </li>
         </ul>
     </div>

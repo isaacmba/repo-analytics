@@ -11,7 +11,7 @@ app.factory('data',['$http','$state', function($http,$state){
       }else{
         // console.log(data.data)
 
-        dataService.repoList = data.data.repoList;
+        dataService.repoList = data.data;
 
         console.log(dataService.repoList)
 
