@@ -20,7 +20,6 @@ app.controller('statsCtrl',['data','$scope',function(data,$scope){
       };
 
 $scope.commitData = data.repoData.commits;
-console.log(data.repoData)
 
 $scope.pie = {
             chart: {

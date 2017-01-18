@@ -37,8 +37,8 @@ analyze.getSinglePageFromApi = function(options, sendData){
     }else{
       var data = false;
       console.log(options.url);
-      console.log(error + response);
-      console.log(response);
+      console.log(error + response.body);
+      console.log(response.body);
     }
     sendData(data);
   })
