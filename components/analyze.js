@@ -39,6 +39,7 @@ analyze.getSinglePageFromApi = function(options, sendData){
       console.log(options.url);
       console.log(error + " status code: " + response.statusCode + body);
     }
+    console.log(data);
     sendData(data);
   })
 };
