@@ -1,6 +1,6 @@
 app.controller('statsCtrl',['data','$scope',function(data,$scope){
   $scope.commits = data.repoData.commits;
-  console.log(data.repoData.info.watchers_count);
+  console.log(data.repoData.punch_card);
   $scope.info = data.repoData.info;
   $scope.punch_card = data.repoData.punch_card;
   $scope.technologies= data.repoData.content;
@@ -105,5 +105,52 @@ $scope.popularityData = [
                 key: "Stargazers",
                 y: data.repoData.info.stargazers
               },
-          ]
+          ];
+
+
+$scope.punch = {
+            chart: {
+                type: 'scatterChart',
+                height: 450,
+                color: d3.scale.category10().range(),
+                scatter: {
+                    onlyCircles: false
+                },
+                showDistX: true,
+                showDistY: true,
+                tooltipContent: function(key) {
+                    return '<h3>' + key + '</h3>';
+                },
+                duration: 350,
+                xAxis: {
+                    axisLabel: 'Hour',
+                    tickFormat: function(d){
+                        return d + ':00'
+                    }
+                },
+                yAxis: {
+                    axisLabel: 'Commits',
+                    tickFormat: function(d){
+                        return d
+                    },
+                    axisLabelDistance: -5
+                },
+                zoom: {
+                    //NOTE: All attributes below are optional
+                    enabled: false,
+                    scaleExtent: [1, 10],
+                    useFixedDomain: false,
+                    useNiceScale: false,
+                    horizontalOff: false,
+                    verticalOff: false,
+                    unzoomEventType: 'dblclick.zoom'
+                }
+            }
+        };
+  $scope.punchCard = [
+              {
+                'key':'Commits',
+                'values':data.repoData.punch_card
+              }
+    ];
 }])
