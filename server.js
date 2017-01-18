@@ -162,7 +162,3 @@ app.get('/logout', function(req,res){
 var port = process.env.PORT || '4000';
 
 app.listen(port);
-
-
-
-

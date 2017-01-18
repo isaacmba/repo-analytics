@@ -320,4 +320,3 @@ analyze.analyzeRepo = function(owner, repo, listId, sendId){
 
 module.exports = analyze;
 
-

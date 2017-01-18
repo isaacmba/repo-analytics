@@ -6,4 +6,5 @@ app.controller('userRepos', ['$scope','data',function($scope,data){
     data.getStats(repo.name,repo.owner);
   }
 
+  
 }])

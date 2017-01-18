@@ -1,3 +1,9 @@
+
+
+.error{
+  color: red;
+  text-align: center;
+
 #avatar{
 	height:75px;
 	width:75px;
@@ -16,17 +22,22 @@
 	padding-left:35px;
 }
 .description{
-	border: 1px solid black;
   display: none;
-  font-size: 12px;
+  font-size: 13px;
   margin-top: 10px;
   padding: 5px;
 }
 .list-group-item:hover .description{
 	display:block;
-} 
-
-.error{
-  color: red;
-  text-align: center;
+}
+.list-group-item:hover{
+	background:#f8f8f8;
+}
+/*.list-group-item:hover li{
+	font-weight: bold;
+}*/
+[ng-click],
+[data-ng-click],
+[x-ng-click] {
+    cursor: pointer;
 }

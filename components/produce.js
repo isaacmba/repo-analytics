@@ -20,6 +20,7 @@ produce.produceReport=function(data){
   if(data.info.last_commit != "No commits in the past year"){
     data.info.last_commit = new Date(data.info.last_commit*1000);
   }
+
   // if(!data.info.description){
   //   data.info.description = "No Description Found";
   // }
