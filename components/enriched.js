@@ -40,8 +40,11 @@ enriched.repoList = function(id ,sendId){
             if(err){
               sendId(null,err);
             }else{
-              // console.log(data._id)
-              sendId(data,null);
+              if(data.repoList.length === 0){
+                sendId(null, {error: "User Has Empty Repository"});
+              }else{
+                sendId(data,null);
+              }
             }
           }) 
     }else{
@@ -51,17 +54,20 @@ enriched.repoList = function(id ,sendId){
     
   })
 };
+
 enriched.commits= function(rawData){
   
   enrichedCommits=[];
-    for(var i =0;i<rawData.length;i++){
+    for(var i =0; i<rawData.length; i++){
       commit = {
         week:rawData[i].week,
         total:rawData[i].total
       }
       enrichedCommits.push(commit);
     }
+    console.log(enrichedCommits);
   return enrichedCommits;
+
 };
 // enriched.info= function(rawData){
 
@@ -77,8 +83,8 @@ enriched.commits= function(rawData){
 
 // }
 enriched.content= function(rawData){
+  
   var dependencies =[];
-
 
     var content = JSON.parse(base64.decode(rawData.content))
     if(content.dependencies){
@@ -129,15 +135,13 @@ enriched.punchCard = function(rawData){
 };
 
 enriched.enrichRepo = function(rawDataId, sendId){
-  // var dbData = new Data();
+
   Data.findById(rawDataId,function(err,data){
     if(err){
       console.error(err);
     }else{
       console.log("enrich me")
-      // if(data.info){
-      //   data.info = enriched.info(data.info);
-      // }
+      console.log(data.commits);
       if(data.commits){
         data.commits = enriched.commits(data.commits);
       }
