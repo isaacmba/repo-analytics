@@ -16,31 +16,29 @@ conclude.concludeInfo = function(data){
       return data[i].week;  
     }
   }
-  return "No commits in the past year";
-  }
-
-conclude.concludeCommits= function(data){
- 
-  for(var i=0;i<data.length;i++){
-    data.week = new Date(data[i].week*1000)
-
-  }
-  return data;
 }
+
+// conclude.concludeCommits= function(data){
+ 
+//   for(var i=0;i<data.length;i++){
+//     data.week = new Date(data[i].week*1000)
+
+//   }
+//   return data;
+// }
 // conclude.concludeInfo = function(){}
 // conclude.concludeContributors = function(){}
-conclude.concludeContent = function(data){
-  var dependencies = [];
-  if(data){
-    console.log(data);
-    for(var i = 0;i < data.length;i++){
-      dependencies.push(data[i])
-    }
-  }else{
-      dependencies.push('No technologies found');
-  }
-  return dependencies;
-}
+// conclude.concludeContent = function(data){
+
+//   var dependencies = [];
+
+//     // console.log(data);
+//     for(var i = 0;i < data.length;i++){
+//       dependencies.push(data[i])
+//     }
+
+//   return dependencies;
+// }
 conclude.concludePunchCard = function(data){
   // console.log(data)
   var punch_card =[];
@@ -73,14 +71,27 @@ var concludeData = new ConcludeData();
     if(err){
       console.error(err)
     }else{
-
-      concludeData.info = data.info;
-      concludeData.info.last_commit = conclude.concludeInfo(data.commits);
-      concludeData.contributors = conclude.concludeContributors(data.contributors);
-      concludeData.commits = conclude.concludeCommits(data.commits);
-      concludeData.content = conclude.concludeContent(data.content);
-      concludeData.punch_card =conclude.concludePunchCard(data.punch_card);
+      if(data.info){
+        concludeData.info = data.info;
+      };
+      if(data.commits){
+        concludeData.info.last_commit = conclude.concludeInfo(data.commits);
+        // concludeData.commits = conclude.concludeCommits(data.commits);
+      }
+      if(!data.commits){
+        concludeData.info.last_commit = "No commits in the past year";
+      }
+      if(data.contributors){
+        concludeData.contributors = conclude.concludeContributors(data.contributors);
+      }
+      // if(data.content){
+      //   concludeData.content = conclude.concludeContent(data.content);
+      // }
+      if(data.punch_card){
+        concludeData.punch_card =conclude.concludePunchCard(data.punch_card);
+      }
       concludeData.save(function(err,data){
+        console.log('produce: '+ data);
         if(err){
           sendId(null,err)
         }else{
