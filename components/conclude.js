@@ -43,10 +43,10 @@ conclude.concludePunchCard = function(data){
   // console.log(data)
   var punch_card =[];
   for(var i = 0; i < 24 ;i++){
-    punch_card.push({hour: i + ':00', commits: 0});
+    punch_card.push({x: i , y: 0});
   }
   for(var i = 0; i<data.length; i++){
-    punch_card[data[i].hour].commits += data[i].commits;
+    punch_card[data[i].x].y += data[i].y;
   }
   return punch_card;
 }

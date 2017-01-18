@@ -116,8 +116,8 @@ enriched.punchCard = function(rawData){
 
     for(var i = 0; i<rawData.length; i++){
         punchCard = {
-          hour: rawData[i][1],
-          commits: rawData[i][2]
+          x: rawData[i][1],
+          y: rawData[i][2]
         }
         enrichedPunchCard.push(punchCard);
       }
