@@ -30,6 +30,10 @@ app.use(express.static('node_modules'));
 app.use(bodyParser.json());  
 app.use(bodyParser.urlencoded({extended: false}));
 
+app.use(function (err, req, res, next) {
+  console.error(err.stack)
+  res.status(500).send('Something broke!')
+})
 // app.use('/repo', repo); 
 // app.use('/', analyze)
 
@@ -80,13 +84,12 @@ app.get('/repo/:owner/:repo/:listId', function (req, res) {
 app.get('/:owner/list', function (req, res){
   analyze.getRepos(req.params.owner, function(id,err){
     if(err){
-
     console.error(err)
     }else{
-      // console.log(id);
       enriched.repoList(id,function(data,err){
       if(err){
-        console.error(err);
+        console.log(err);
+        res.status(404).send(err);
       }else{
         // console.log(data)
         res.send(data)

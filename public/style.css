@@ -25,3 +25,8 @@
 .list-group-item:hover .description{
 	display:block;
 } 
+
+.error{
+  color: red;
+  text-align: center;
+}
