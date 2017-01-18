@@ -31,8 +31,6 @@ analyze.createOptionsObj = function(url, page){
 
 analyze.getSinglePageFromApi = function(options, sendData){
   request(options, function (error, response, body){
-
-
     // console.log(response.body)
     if (!error && response.statusCode == 200) {
       var data = JSON.parse(body);
@@ -41,7 +39,6 @@ analyze.getSinglePageFromApi = function(options, sendData){
       console.log(options.url);
       // console.log(error + " Body: " + body);
     }
-    console.log(data);
     sendData(data);
   })
 };
@@ -307,5 +304,4 @@ analyze.analyzeRepo = function(owner, repo, sendId){
 }
 
 module.exports = analyze;
-
 
