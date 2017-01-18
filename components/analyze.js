@@ -5,7 +5,6 @@ var config = require('../config/config');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var router = express.Router();
-
 var Data = require('../models/DataModel')
 var RepoList = require('../models/ListModel')
 
@@ -36,8 +35,6 @@ analyze.getSinglePageFromApi = function(options, sendData){
       var data = JSON.parse(body);
     }else{
       var data = false;
-      console.log(options.url);
-      console.log(error + response.body);
       console.log(response.body);
     }
     sendData(data);
@@ -107,8 +104,7 @@ analyze.getContributors = function(owner, repo, Data, sendId) {
            getInfoFromApi(url, ++page);
        }else{
          data.push(false);
-         console.log(options.url);
-         console.log(error + response);
+         console.log(response.body);
          // res.json(data);
        }
      }));
@@ -153,8 +149,8 @@ analyze.getRepos = function(owner,sendId){
            getInfoFromApi(url, ++page);
        }else{
          data.push(false);
-         console.log(options.url);
-         console.log(error + response );
+         console.log(response.body);
+
          // res.json(data);
        }
      }));
