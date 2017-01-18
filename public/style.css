@@ -2,9 +2,9 @@
 	height:75px;
 	width:75px;
 }
-ul li {
+/*ul li {
   list-style-type: none;
-}
+}*/
 
 @media screen and (min-width: 768px)
 .jumbotron {

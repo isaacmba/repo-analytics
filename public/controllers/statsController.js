@@ -7,7 +7,7 @@ app.controller('statsCtrl',['data','$scope',function(data,$scope){
   $scope.repo = data.repoData;
   $scope.last_commit = data.repoData.info.last_commit;
 //////graphs///////
-  $scope.options = {
+  $scope.sparkline = {
             chart: {
                 type: 'sparklinePlus',
                 height: 250,
@@ -25,7 +25,7 @@ console.log(data.repoData)
 $scope.pie = {
             chart: {
                 type: 'pieChart',
-                height: 500,
+                height: 600,
                 x: function(d){return d.key;},
                 y: function(d){return d.y;},
                 showLabels: true,
