@@ -9,7 +9,6 @@ app.factory('data',['$http','$state', function($http,$state){
     dataService.error.isError = false;
     dataService.repoList ={};
     return $http.get('/'+ username +'/list').then(function(data){
-
         dataService.repoList = data.data;
 
         console.log(dataService.repoList)

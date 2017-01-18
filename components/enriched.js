@@ -67,7 +67,7 @@ enriched.commits= function(rawData){
     }
     console.log(enrichedCommits);
   return enrichedCommits;
-  
+
 };
 // enriched.info= function(rawData){
 
