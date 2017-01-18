@@ -217,7 +217,7 @@ analyze.getCommits = function(owner,repo, Data, sendId) {
   console.log('analyze getting commits');
 
   
-  var url = config.rootUrl + '/repos/' + owner + '/' + repo + '/stats/commit_activity' + config.POSURL
+  var url = config.rootUrl + '/repos/' + owner + '/' + repo + '/stats/commit_activity' + config.POSURL;
   
   var options = analyze.createOptionsObj(url, 0);
 
