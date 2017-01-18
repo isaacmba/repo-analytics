@@ -76,7 +76,7 @@ var concludeData = new ConcludeData();
       };
       if(data.commits){
         concludeData.info.last_commit = conclude.concludeInfo(data.commits);
-        // concludeData.commits = conclude.concludeCommits(data.commits);
+        concludeData.commits = data.commits;
       }
       if(!data.commits){
         concludeData.info.last_commit = "No commits in the past year";
@@ -84,9 +84,9 @@ var concludeData = new ConcludeData();
       if(data.contributors){
         concludeData.contributors = conclude.concludeContributors(data.contributors);
       }
-      // if(data.content){
-      //   concludeData.content = conclude.concludeContent(data.content);
-      // }
+      if(data.content){
+        concludeData.content = data.content;
+      }
       if(data.punch_card){
         concludeData.punch_card =conclude.concludePunchCard(data.punch_card);
       }

@@ -1,4 +1,5 @@
 
+
 form {
     border: 3px solid #f1f1f1;
 }
@@ -81,3 +82,32 @@ span.psw {
 .container .jumbotron {
 	padding-left:35px;
 }
+
+#avatar{
+	height:75px;
+	width:75px;
+}
+/*ul li {
+  list-style-type: none;
+}*/
+
+@media screen and (min-width: 768px)
+.jumbotron {
+	padding-top:10px
+
+	}
+@media screen and (min-width: 768px)
+.container .jumbotron {
+	padding-left:35px;
+}
+.description{
+	border: 1px solid black;
+  display: none;
+  font-size: 12px;
+  margin-top: 10px;
+  padding: 5px;
+}
+.list-group-item:hover .description{
+	display:block;
+} 
+

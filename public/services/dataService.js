@@ -1,23 +1,29 @@
 app.factory('data',['$http','$state', function($http,$state){
   var dataService = {};
-  dataService.repoList =[];
+  dataService.repoList ={};
   dataService.repoData = {};
-  dataService.getRepos = function(username){
 
+  dataService.getRepos = function(username){
+    dataService.repoList =[];
     $http.get('/'+ username +'/list').then(function(data,err){
       if(err){
         console.log(err)
       }else{
         // console.log(data.data)
+
         dataService.repoList = data.data.repoList;
+
+        console.log(dataService.repoList)
+
         $state.go('userRepos');
       }
     })
   }
 
   dataService.getStats = function(repo,owner){
+    dataService.repoData = {};
     // console.log(repo + owner)
-    $http.get('/repo/'+owner+'/'+repo).then(function(data,err){
+    $http.get('/repo/'+owner+'/'+repo+'/'+ dataService.repoList._id).then(function(data,err){
       if(err){
         console.log(err)
       }else{

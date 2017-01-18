@@ -1,6 +1,6 @@
 app.controller('statsCtrl',['data','$scope',function(data,$scope){
   $scope.commits = data.repoData.commits;
-
+  console.log(data.repoData);
   $scope.info = data.repoData.info;
   $scope.punch_card = data.repoData.punch_card;
   $scope.technologies= data.repoData.content;
@@ -19,8 +19,12 @@ app.controller('statsCtrl',['data','$scope',function(data,$scope){
 //             }
 //       };
 
+
 // $scope.commitData = data.repoData.commits;
-console.log(data.repoData.info.last_commit);
+
+
+$scope.commitData = data.repoData.commits;
+
 
 $scope.pie = {
             chart: {
