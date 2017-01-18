@@ -27,6 +27,9 @@ enriched.repoList = function(id ,sendId){
           stargazers: data.repoList[i][j].stargazers_count,
           avatar: data.repoList[i][j].owner.avatar_url
         }
+        if(!repo.description){
+          repo.description = 'No Description Found'
+        }
         enrichedRepoList.push(repo);
       }
     }

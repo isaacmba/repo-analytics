@@ -12,10 +12,10 @@ conclude.concludeInfo = function(data){
   for(var i = data.length-1; i >=0; i--){
     if(data[i].total > 0){
       // console.log(data[i])
-
       return data[i].week;  
     }
   }
+  return "No commits in the past year";
 }
 
 // conclude.concludeCommits= function(data){
