@@ -7,24 +7,29 @@ app.controller('statsCtrl',['data','$scope',function(data,$scope){
   $scope.repo = data.repoData;
   $scope.last_commit = data.repoData.info.last_commit;
 //////graphs///////
-  $scope.sparkline = {
-            chart: {
-                type: 'sparklinePlus',
-                height: 250,
-                x: function(d, i){return i;},
-                xTickFormat: function(d) {
-                    return d3.time.format('%x')(new Date($scope.commitData[d].x))
-                },
-                duration: 250
-            }
-      };
+//   $scope.options = {
+//             chart: {
+//                 type: 'sparklinePlus',
+//                 height: 250,
+//                 x: function(d, i){return i;},
+//                 xTickFormat: function(d) {
+//                     return d3.time.format('%x')(new Date($scope.commitData[d].x))
+//                 },
+//                 duration: 250
+//             }
+//       };
+
+
+// $scope.commitData = data.repoData.commits;
+
 
 $scope.commitData = data.repoData.commits;
+
 
 $scope.pie = {
             chart: {
                 type: 'pieChart',
-                height: 600,
+                height: 500,
                 x: function(d){return d.key;},
                 y: function(d){return d.y;},
                 showLabels: true,

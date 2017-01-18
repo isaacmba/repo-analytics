@@ -9,7 +9,7 @@
       <hr>
       <nvd3 options="sparkline" data="commitData"></nvd3>
       <hr>
-      <h5>Last committed at, {{last_commit}}</h5>
+      <h5>Last committed at, <mydate>{{last_commit | date:'yyyy-MM-dd'}}</mydate></h5>
       </div>
       <hr>
 
@@ -26,10 +26,9 @@
       </div>
     </div>
     <div class="col-md-4">
-      <div>
-        <img id="avatar" src="{{repo.info.avatar}}" class="rounded float-right">
+        <img id="avatar" src="{{repo.info.avatar}}" class="rounded">
         {{repo.info.owner}}
-      </div>
+
 
       <hr>
       <div class="jumbotron horizontal-center" >

@@ -10,8 +10,11 @@ app.factory('data',['$http','$state', function($http,$state){
         console.log(err)
       }else{
         // console.log(data.data)
-        dataService.repoList = data.data;
+
+        dataService.repoList = data.data.repoList;
+
         console.log(dataService.repoList)
+
         $state.go('userRepos');
       }
     })
