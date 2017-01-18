@@ -28,18 +28,17 @@ app.factory('data',['$http','$state', function($http,$state){
   dataService.getStats = function(repo,owner){
     dataService.error.isError = false;
     dataService.repoData = {};
-    // console.log(repo + owner)
-    $http.get('/repo/'+owner+'/'+repo+'/'+ dataService.repoList._id).then(function(data,err){
-      if(err){
-        dataService.error.error = err;
-      }else{
-        // console.log(data.data)
+
+    return $http.get('/repo/'+owner+'/'+repo+'/'+ dataService.repoList._id).then(function(data){
         dataService.repoData = data.data;
         console.log(data.data.commits)
         console.log("switching states")
         $state.go('userStats');
 
-      }
+    },function(err){
+      dataService.error.isError = true;
+      dataService.error.error = err;
+      return dataService.error;
     })
   }
 
