@@ -31,13 +31,15 @@ analyze.createOptionsObj = function(url, page){
 
 analyze.getSinglePageFromApi = function(options, sendData){
   request(options, function (error, response, body){
-    console.log(response.statusCode);
+
+
+    // console.log(response.body)
     if (!error && response.statusCode == 200) {
       var data = JSON.parse(body);
     }else{
-      var data = false
+      var data = false;
       console.log(options.url);
-      console.log(error + " status code: " + response.statusCode + body);
+      // console.log(error + " Body: " + body);
     }
     console.log(data);
     sendData(data);
@@ -106,23 +108,13 @@ analyze.getContributors = function(owner, repo, Data, sendId) {
            console.log(d.length)
            getInfoFromApi(url, ++page);
        }else{
-         data = false
+         data.push(false);
          console.log(options.url);
          console.log(error + " status code: " + response.statusCode + body);
          // res.json(data);
        }
      }));
-  // analyze.getMultiplPagesFromApi(url, page, function(data){
 
-  //   rawData.contributors = data;
-  //   rawData.save(function(err,data){
-  //    if(err){
-  //      sendId(null,err);
-  //    }else{
-  //      sendId(data._id,null)
-  //    }
-  //   })
-  // });
   }
   getInfoFromApi(url,page)
 }
