@@ -31,11 +31,12 @@ analyze.createOptionsObj = function(url, page){
 analyze.getSinglePageFromApi = function(options, sendData){
   request(options, function (error, response, body){
     // console.log(response.body)
-    if (!error && response.statusCode == 200) {
+    if (!error && (response.statusCode == 200 || response.statusCode == 202)) {
       var data = JSON.parse(body);
     }else{
       var data = false;
       console.log(response.body);
+      console.log(error);
     }
     sendData(data);
   })
@@ -71,7 +72,9 @@ analyze.getSinglePageFromApi = function(options, sendData){
 // };
 
 
-/*************************************/
+/****************Analyze Stats*********************/
+
+/////////get contributores////////////
 analyze.getContributors = function(owner, repo, Data, sendId) {
 
   console.log('analyze getting contributors');
@@ -86,7 +89,7 @@ analyze.getContributors = function(owner, repo, Data, sendId) {
     
     // console.log(options.url)
     request(options, (function (error, response, body) {
-       if (!error && response.statusCode == 200) {
+       if (!error && (response.statusCode == 200 || response.statusCode == 202)) {
          var d = JSON.parse(body);
          if(d.length === 0){
            Data.contributors = data;
@@ -112,7 +115,7 @@ analyze.getContributors = function(owner, repo, Data, sendId) {
   }
   getInfoFromApi(url,page)
 }
-
+//////////get repo's list///////////
 analyze.getRepos = function(owner,sendId){
 
   page = 1;
@@ -128,7 +131,7 @@ analyze.getRepos = function(owner,sendId){
     
     // console.log(options.url)
     request(options, (function (error, response, body) {
-       if (!error && response.statusCode == 200) {
+       if (!error && (response.statusCode == 200 || response.statusCode == 202)) {
          var d = JSON.parse(body);
          if(d.length === 0){
 
@@ -166,21 +169,10 @@ analyze.getRepos = function(owner,sendId){
   }
 getInfoFromApi(url,page)
 
-// analyze.getMultiplPagesFromApi(url, page, function(data){
-//   var rawData = new RawData();
-//   rawData.repoList = data;
-//   rawData.save(function(err,data){
-//    if(err){
-//      sendId(null,err);
-//    }else{
-//      sendId(rawData._id,null)
-//    }
-//   })
-// });
+
 }
 
 //////get repo info//////
-// router.get('/:owner/:repo/info', function (req, res) {
 analyze.getInfo = function(owner, repo, Data, id, sendId){
 
   console.log('analyze getting info');
@@ -215,7 +207,6 @@ analyze.getInfo = function(owner, repo, Data, id, sendId){
 analyze.getCommits = function(owner,repo, Data, sendId) {
   
   console.log('analyze getting commits');
-
   
   var url = config.rootUrl + '/repos/' + owner + '/' + repo + '/stats/commit_activity' + config.POSURL
   
@@ -228,15 +219,14 @@ analyze.getCommits = function(owner,repo, Data, sendId) {
           sendId(null,err);
         }
         else{
-          // console.log(data.commits)
+          console.log(data.commits)
           sendId(data,null)
         }
       })
     })
 };
 
-
-
+//////get content///////////////
 analyze.getContent = function(owner,repo,Data,sendId){
   
   console.log('analyze getting content');
@@ -259,6 +249,7 @@ analyze.getContent = function(owner,repo,Data,sendId){
     })
 };
 
+//////////get punch-card///////////
 analyze.getPunchCard = function(owner, repo, Data, sendId) {
   
   console.log('Analyze Getting punch card');
@@ -282,7 +273,7 @@ analyze.getPunchCard = function(owner, repo, Data, sendId) {
 };
 
 
-
+//Get all data for specific repo from gitHub api and save it
 analyze.analyzeRepo = function(owner, repo, listId, sendId){
   var data = new Data();
   analyze.getInfo(owner, repo, data, listId, function(data, err){
