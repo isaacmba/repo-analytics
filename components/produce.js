@@ -1,14 +1,20 @@
+/****************icnludes*********************/
+
 var express = require('express');
 var mongoose = require('mongoose');
 
+/****************Var**********************/
+
 var produce = {};
 
+/*****************Produce******************/
+
 produce.produceReport=function(data){
-  // console.log(data.commits.length)
+
+  //Set the format for the commits chart
   if(data.commits){
     var chartCommits = [];
     for(var i = 0;i<data.commits.length;i++){
-      // data.commits[i].week = new Date(data.commits[i].week*1000);
       var commit ={
         x : new Date(data.commits[i].week*1000),
         y : data.commits[i].total
@@ -17,18 +23,17 @@ produce.produceReport=function(data){
     }
     data.commits = chartCommits;
   }
+
+  //if there are commits set the format for last commit
   if(data.info.last_commit != "No commits in the past year"){
     data.info.last_commit = new Date(data.info.last_commit*1000);
   }
 
-  // if(!data.info.description){
-  //   data.info.description = "No Description Found";
-  // }
+  //No technologies
   if(!data.content){
     data.content = ["No Technologies Found"];
   }
   
-  // data = JSON.parse(data)
   return data;
 }
 
