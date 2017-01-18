@@ -31,6 +31,7 @@ analyze.createOptionsObj = function(url, page){
 
 analyze.getSinglePageFromApi = function(options, sendData){
   request(options, function (error, response, body){
+    console.log(response.statusCode);
     if (!error && response.statusCode == 200) {
       var data = JSON.parse(body);
     }else{
