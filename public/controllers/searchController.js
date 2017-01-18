@@ -9,7 +9,7 @@ app.controller('searchCtrl', ['$scope','data',function($scope,data){
     })
   }
 
-  // $scope.error = data.error;
+
   $scope.error = data.error;  
 
 }])
