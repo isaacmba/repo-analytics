@@ -40,8 +40,11 @@ enriched.repoList = function(id ,sendId){
             if(err){
               sendId(null,err);
             }else{
-              // console.log(data._id)
-              sendId(data,null);
+              if(data.repoList.length === 0){
+                sendId(null, {error: "User Has Empty Repository"});
+              }else{
+                sendId(data,null);
+              }
             }
           }) 
     }else{
