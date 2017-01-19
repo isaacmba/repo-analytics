@@ -174,6 +174,7 @@ analyze.getCommits = function(owner,repo, Data, sendId) {
         sendId(null,err);
       }
       else{
+        console.log('raw commits: ' + data);
         sendId(data,null)
       }
     })

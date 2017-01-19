@@ -3,8 +3,8 @@ var mongoose = require('mongoose');
 var ConcludeDataSchema = new mongoose.Schema({
   
   info:Object,
-  commits:Array,
-  contributors:Array,
+  commits:Object,
+  contributors:Object,
   punch_card:Object,
   content:Object
 

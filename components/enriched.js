@@ -64,7 +64,7 @@ enriched.repoList = function(id ,sendId){
 enriched.commits= function(rawData){
  
   enrichedCommits=[];
-
+  console.log('enrich input: ' + rawData);
   for(var i =0; i<rawData.length; i++){
     commit = {
       week:rawData[i].week,
@@ -72,7 +72,7 @@ enriched.commits= function(rawData){
     };
     enrichedCommits.push(commit);
   }
-
+  console.log('enrich output: ' + enrichedCommits);
   return enrichedCommits;
 };
 
@@ -136,11 +136,11 @@ enriched.enrichRepo = function(rawDataId, sendId){
     if(err){
       console.error(err);
     }else{
-
+      console.log('All data: ' + data);
       console.log("enrich me")
-      if(data.commits){
-        data.commits = enriched.commits(data.commits);
-      }
+      // if(data.commits){
+      //   data.commits = enriched.commits(data.commits);
+      // }
       if(data.content){     
         data.content = enriched.content(data.content);
       }      
