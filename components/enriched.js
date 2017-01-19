@@ -69,7 +69,7 @@ enriched.commits= function(rawData){
     commit = {
       week:rawData[i].week,
       total:rawData[i].total
-    }
+    };
     enrichedCommits.push(commit);
   }
 

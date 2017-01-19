@@ -30,7 +30,7 @@ produce.produceReport=function(data){
   }
 
   //No technologies
-  if(!data.content){
+  if(!data.content || data.content.length === 0){
     data.content = ["No Technologies Found"];
   }
   

@@ -88,7 +88,6 @@ var concludeData = new ConcludeData();
         concludeData.punch_card =conclude.concludePunchCard(data.punch_card);
       }
       concludeData.save(function(err,data){
-        console.log('produce: '+ data);
         if(err){
           sendId(null,err)
         }else{
