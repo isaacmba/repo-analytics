@@ -152,8 +152,7 @@ app.get('/logout', function(req,res){
 // }
  
 
-var port = process.env.PORT || '4000';
+// var port = process.env.PORT || '4000';
+// app.listen(port);
 
-
-
-app.listen(port);
+app.listen(process.env.PORT || '4000');
