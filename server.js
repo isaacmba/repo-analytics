@@ -22,7 +22,9 @@ var auth = expressJWT({secret:"myLittleSecret"})
 
 var app = express();
 
-mongoose.connect('mongodb://localhost/repos');
+// mongoose.connect('mongodb://localhost/repos');
+mongoose.connect(process.env.MONGOLAB_GRAY_URI ||'mongodb://localhost/rereddit-final');
+
 
 app.use(express.static('public'));
 app.use(express.static('node_modules'));
@@ -151,5 +153,7 @@ app.get('/logout', function(req,res){
  
 
 var port = process.env.PORT || '4000';
+
+
 
 app.listen(port);
