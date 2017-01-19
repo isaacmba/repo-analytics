@@ -23,7 +23,7 @@ var auth = expressJWT({secret:"myLittleSecret"})
 var app = express();
 
 // mongoose.connect('mongodb://localhost/repos');
-mongoose.connect(process.env.MONGOLAB_GRAY_URI ||'mongodb://localhost/rereddit-final');
+mongoose.connect(process.env.MONGOLAB_GRAY_URI ||'mongodb://localhost/repos');
 
 
 app.use(express.static('public'));
