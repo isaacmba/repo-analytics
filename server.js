@@ -1,4 +1,4 @@
-/*********include****************/
+/*********includes****************/
 var express = require('express');
 var request = require('request');
 var bodyParser = require('body-parser');
@@ -22,7 +22,9 @@ var auth = expressJWT({secret:"myLittleSecret"})
 
 var app = express();
 
-mongoose.connect('mongodb://localhost/repos');
+// mongoose.connect('mongodb://localhost/repos');
+mongoose.connect(process.env.MONGOLAB_GRAY_URI ||'mongodb://localhost/repos');
+
 
 app.use(express.static('public'));
 app.use(express.static('node_modules'));
@@ -38,7 +40,6 @@ app.use(function (err, req, res, next) {
 // app.use('/', analyze)
 
 // var RawData = require('./models/DataModel')
-/*************API Functionality***************/
 
 
 
@@ -49,57 +50,49 @@ app.get('/', function (req, res) {
    res.sendFile(__dirname + "/index.html");
 });
 
-app.post('/login',function(req,res,next){
-  res.send(req.body);
-})
-
-
-/***********test**********/
-
+//Get repo's list
 app.get('/repo/:owner/:repo/:listId', function (req, res) {
-  console.log(req.params.listId);
   analyze.analyzeRepo(req.params.owner, req.params.repo, req.params.listId, function(id, err){
     if(err){
-    console.error(err)
+      console.error(err)
     }else{
-    enriched.enrichRepo(id,function(id,err){
-      if(err){
-        console.error(err);
-      }else{
-        console.log(id);
-        conclude.concludeRepo(id,function(data,err){
-          if(err){
-            console.log(err)
-          }else{
-            var x = produce.produceReport(data);
-            res.send(x);
-          }
-        })
-      }
-    })
-    }
-  })
-});
-
-app.get('/:owner/list', function (req, res){
-  analyze.getRepos(req.params.owner, function(id,err){
-    if(err){
-    console.error(err)
-    }else{
-      enriched.repoList(id,function(data,err){
-      if(err){
-        console.log(err);
-        res.status(404).send(err);
-      }else{
-        // console.log(data)
-        res.send(data)
-      }
+      enriched.enrichRepo(id,function(id,err){
+        if(err){
+          console.error(err);
+        }else{
+          conclude.concludeRepo(id,function(data,err){
+            if(err){
+              console.log(err)
+            }else{
+              var finalData = produce.produceReport(data);
+              res.send(finalData);
+            }
+          })
+        }
       })
     }
   })
 });
 
-/*************************/
+////Get repo's list
+app.get('/:owner/list', function (req, res){
+  analyze.getRepos(req.params.owner, function(id,err){
+    if(err){
+      console.error(err)
+    }else{
+      enriched.repoList(id,function(data,err){
+        if(err){
+          console.log(err);
+          res.status(404).send(err);
+        }else{
+          res.send(data)
+        }
+      })
+    }
+  })
+});
+
+/************************************/
 
 /////////git auth///////////
 app.use(expressSession({ secret: 'mySecretKey' }));
@@ -159,6 +152,7 @@ app.get('/logout', function(req,res){
 // }
  
 
-var port = process.env.PORT || '4000';
+// var port = process.env.PORT || '4000';
+// app.listen(port);
 
-app.listen(port);
+app.listen(process.env.PORT || '4000');
