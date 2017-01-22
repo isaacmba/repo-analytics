@@ -93,7 +93,7 @@ getInfoFromApi(url,page);
 };
 
 
-/////////get contributores////////////
+/////////get contributors////////////
 analyze.getContributors = function(owner, repo, Data, sendId){
 
   console.log('Getting contributors');
