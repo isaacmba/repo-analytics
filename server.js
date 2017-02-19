@@ -22,19 +22,39 @@ var auth = expressJWT({secret:"myLittleSecret"})
 
 var app = express();
 
-//mongoose.connect('mongodb://localhost/repos');
-mongoose.connect(process.env.MONGOLAB_GRAY_URI ||'mongodb://localhost/repos');
+/*******************/
+var options = { server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }, 
+                replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } } };       
+ 
+var mongodbUri = process.env.MONGOLAB_GRAY_URI;
+ 
+mongoose.connect(mongodbUri, options);
 
-var db = mongoose.connection;
-
-db.on('error', function (err) {
-  console.log('mongodb connection error: %s', err);
-  process.exit();
-});
-db.once('open', function () {
+var conn = mongoose.connection;             
+ 
+conn.on('error', console.error.bind(console, 'connection error:'));  
+ 
+conn.once('open', function() {
+  // Wait for the database connection to establish, then start the app.  
   console.log('Successfully connected to mongodb');
-  app.emit('dbopen');
+  app.emit('dbopen');                       
 });
+
+/*******************/
+
+//mongoose.connect('mongodb://localhost/repos');
+// mongoose.connect(process.env.MONGOLAB_GRAY_URI ||'mongodb://localhost/repos');
+
+// var db = mongoose.connection;
+
+// db.on('error', function (err) {
+//   console.log('mongodb connection error: %s', err);
+//   process.exit();
+// });
+// db.once('open', function () {
+//   console.log('Successfully connected to mongodb');
+//   app.emit('dbopen');
+// });
 
 
 app.use(express.static('public'));
