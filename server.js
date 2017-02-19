@@ -25,6 +25,17 @@ var app = express();
 //mongoose.connect('mongodb://localhost/repos');
 mongoose.connect(process.env.MONGOLAB_GRAY_URI ||'mongodb://localhost/repos');
 
+var db = mongoose.connection;
+
+db.on('error', function (err) {
+  console.log('mongodb connection error: %s', err);
+  process.exit();
+});
+db.once('open', function () {
+  console.log('Successfully connected to mongodb');
+  app.emit('dbopen');
+});
+
 
 app.use(express.static('public'));
 app.use(express.static('node_modules'));
