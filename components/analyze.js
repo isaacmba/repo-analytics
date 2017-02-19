@@ -13,7 +13,7 @@ var analyze = {};
 
 analyze.createOptionsObj = function(url, page){
 
-  if(page){
+  if(page != 0){
     var url = url + page;
   }
 
@@ -94,7 +94,7 @@ getInfoFromApi(url,page);
 
 
 /////////get contributores////////////
-analyze.getContributors = function(owner, repo, Data, sendId){
+analyze.getContributors = function(owner, repo, paasedData, sendId){
 
   console.log('Getting contributors');
   var page = 1;
@@ -110,12 +110,12 @@ analyze.getContributors = function(owner, repo, Data, sendId){
       if(!error && (response.statusCode == 200 || response.statusCode == 202)){
         var d = JSON.parse(body);
         if(d.length === 0){
-          Data.contributors = data;
-          Data.save(function(err,data){
+          paasedData.contributors = data;
+          paasedData.save(function(err,data){
             if(err){
               sendId(null,err);
             }else{
-              sendId(Data,null)
+              sendId(data,null)
             }
           })
           return;
@@ -134,7 +134,7 @@ analyze.getContributors = function(owner, repo, Data, sendId){
 
 
 //////get repo info//////
-analyze.getInfo = function(owner, repo, Data, id, sendId){
+analyze.getInfo = function(owner, repo, paasedData, id, sendId){
 
   console.log('Getting info');
   
@@ -144,8 +144,8 @@ analyze.getInfo = function(owner, repo, Data, id, sendId){
     }else{
       for(var i = 0; i < data.repoList.length; i++){
         if(repo == data.repoList[i].name){
-          Data.info = data.repoList[i];
-          Data.save(function(err,data){
+          paasedData.info = data.repoList[i];
+          paasedData.save(function(err,data){
             if(err){
               sendId(null,err);
             }
@@ -160,7 +160,7 @@ analyze.getInfo = function(owner, repo, Data, id, sendId){
 };
 
 ///////get commits///////
-analyze.getCommits = function(owner,repo, Data, sendId) {
+analyze.getCommits = function(owner,repo, paasedData, sendId) {
   
   console.log('Getting commits');
   
@@ -168,8 +168,8 @@ analyze.getCommits = function(owner,repo, Data, sendId) {
   var options = analyze.createOptionsObj(url, 0);
 
   analyze.getSinglePageFromApi(options, function(data){
-    Data.commits = data;
-    Data.save(function(err,data){
+    paasedData.commits = data;
+    paasedData.save(function(err,data){
       if(err){
         sendId(null,err);
       }
@@ -182,7 +182,7 @@ analyze.getCommits = function(owner,repo, Data, sendId) {
 };
 
 //////get content///////////////
-analyze.getContent = function(owner,repo,Data,sendId){
+analyze.getContent = function(owner,repo,paasedData,sendId){
   
   console.log('Getting content');
   
@@ -190,8 +190,8 @@ analyze.getContent = function(owner,repo,Data,sendId){
   var options = analyze.createOptionsObj(url, 0);
 
   analyze.getSinglePageFromApi(options, function(data){
-    Data.content = data;
-    Data.save(function(err,data){
+    paasedData.content = data;
+    paasedData.save(function(err,data){
       if(err){
         sendId(null,err);
       }
@@ -203,7 +203,7 @@ analyze.getContent = function(owner,repo,Data,sendId){
 };
 
 //////////get punch-card///////////
-analyze.getPunchCard = function(owner, repo, Data, sendId) {
+analyze.getPunchCard = function(owner, repo, paasedData, sendId) {
   
   console.log('Getting punch card');
   
@@ -212,8 +212,8 @@ analyze.getPunchCard = function(owner, repo, Data, sendId) {
 
   analyze.getSinglePageFromApi(options, function(data){
 
-    Data.punch_card = data; 
-    Data.save(function(err,data){
+    paasedData.punch_card = data; 
+    paasedData.save(function(err,data){
       if(err){
         sendId(null,err);
       }
@@ -244,7 +244,7 @@ analyze.analyzeRepo = function(owner, repo, listId, sendId){
                 if(err){
                   console.error(err);
                 }else{
-                  analyze.getPunchCard(owner, repo,data , function(data, err){
+                  analyze.getPunchCard(owner, repo, data , function(data, err){
                     if(err){
                       console.error(err);
                     }else{           
